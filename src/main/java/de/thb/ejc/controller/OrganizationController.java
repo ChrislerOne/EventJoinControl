@@ -25,7 +25,7 @@ public class OrganizationController {
      * @return ResponseEntity
      */
     @PostMapping("/organizations/add")
-    public ResponseEntity addEvent(@RequestBody OrganizationForm organizationForm) {
+    public ResponseEntity addOrganization(@RequestBody OrganizationForm organizationForm) {
         try {
             organizationService.addOrganization(organizationForm);
             return ResponseEntity.status(HttpStatus.CREATED).build();

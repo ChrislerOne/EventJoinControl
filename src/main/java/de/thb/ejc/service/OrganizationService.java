@@ -20,6 +20,7 @@ public class OrganizationService {
     public void addOrganization(OrganizationForm organizationForm) {
         Organization organization = new Organization();
         organization.setName(organizationForm.getName());
+        organizationRepository.save(organization);
     }
 
     public ArrayList<Organization> getAllOrganizations() {

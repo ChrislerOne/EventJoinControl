@@ -1,5 +1,6 @@
 package de.thb.ejc.repository;
 
+import de.thb.ejc.entity.State;
 import de.thb.ejc.entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,12 +14,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query("SELECT n FROM user n WHERE n.id = :id")
     Optional<User> findById(@Param("id") int id);
 
-    //ToDo Query
-    @Query("select n from user n")
-    static Optional<User> findStateByName(@Param("user") String name) {
-        //ToDo return type
-        return null;
-    }
+    @Query("select u.state from user u INNER JOIN states s on s.id = u.state.id WHERE u.qrToken = :qrToken")
+    Optional<State> findStateByQrToken(@Param("qrToken") String qrToken);
 }
 
 // KEINE GARANTIE, DASS ES FUNKTIONIERT!

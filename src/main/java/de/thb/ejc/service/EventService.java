@@ -21,6 +21,7 @@ public class EventService {
     public void addEvent(EventForm eventForm) {
         Event event = new Event();
         event.setName(eventForm.getName());
+        eventRepository.save(event);
     }
 
     public ArrayList<Event> getAllEvents() {

@@ -17,8 +17,8 @@ public class StateService {
     public State getStateById(int id) {
         return stateRepository.findById(id).get();
     }
-    //TODO @Eric
 
+    //TODO @Eric
     public ArrayList<User> getUserWithStatus(String state) {
         return stateRepository.findUserByState(state);
     }
@@ -30,5 +30,6 @@ public class StateService {
     public void addState(StateForm stateForm) {
         State state = new State();
         state.setName(stateForm.getName());
+        stateRepository.save(state);
     }
 }

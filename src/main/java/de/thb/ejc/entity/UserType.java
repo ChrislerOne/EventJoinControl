@@ -2,7 +2,7 @@ package de.thb.ejc.entity;
 
 import javax.persistence.*;
 
-@Table(name = "userTypes")
+@Table(name = "usertypes")
 @Entity
 public class UserType {
     @Id

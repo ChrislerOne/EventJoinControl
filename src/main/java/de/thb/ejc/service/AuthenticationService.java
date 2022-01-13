@@ -6,6 +6,9 @@ import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import de.thb.ejc.entity.User;
 import de.thb.ejc.form.RegisterUserForm;
+import de.thb.ejc.repository.QRCodeRepository;
+import de.thb.ejc.repository.UserRepository;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,10 @@ public class AuthenticationService {
     private StateService stateService;
     @Autowired
     private UserTypeService userTypeService;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    QRCodeRepository qrCodeRepository;
 
     public String verifyToken(String idToken) throws FirebaseAuthException {
 

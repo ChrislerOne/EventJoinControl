@@ -20,16 +20,19 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "stateid")
-    private de.thb.ejc.entity.State state;
+    private State state;
 
     @OneToOne
-    @JoinColumn(name = "userTypeid")
-    private de.thb.ejc.entity.UserType userType;
+    @JoinColumn(name = "usertypeid")
+    private UserType userType;
 
     @Column(name = "uid")
     private String uid;
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "qrtoken")
+    private String qrToken;
 
 }
