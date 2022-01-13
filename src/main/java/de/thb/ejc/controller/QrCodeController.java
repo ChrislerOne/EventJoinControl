@@ -19,20 +19,6 @@ public class QrCodeController {
     private static final int width = 350;
     private static final int height = 350;
 
-    @PostMapping("/QRCode")
-    public String getQRCode(@RequestBody String text){
-
-        byte[] image = new byte[0];
-        try {
-            // Generate and Return Qr Code in Byte Array
-            image = QrGenerator.getQRCodeImage(text, width, height);
-        } catch (WriterException | IOException e) {
-            e.printStackTrace();
-        }
-        String qrcode = Base64.getEncoder().encodeToString(image);
-
-        return qrcode;
-    }
 
 
     @GetMapping(value = "/genrateQRCode/{codeText}")

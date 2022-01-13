@@ -19,10 +19,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 }
 
 // KEINE GARANTIE, DASS ES FUNKTIONIERT!
-//    SELECT s.name FROM user AS u
-//        INNER JOIN user_events AS ue on u.id = ue.userId
-//        INNER JOIN event_state AS es on ue.eventId = es.eventId
-//        INNER JOIN states AS s on es.stateId = s.id
-//    WHERE u.id = 1
 
 // TODO: Möglicherweise muss das abgeändert werden! Beachte Auth.
