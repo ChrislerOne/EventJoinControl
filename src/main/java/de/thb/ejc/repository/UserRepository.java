@@ -16,6 +16,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query("select u.state from user u INNER JOIN states s on s.id = u.state.id WHERE u.qrToken = :qrToken")
     Optional<State> findStateByQrToken(@Param("qrToken") String qrToken);
+
+
+    @Query("SELECT u.userType FROM user u WHERE u.uid = :uid")
+    Optional<UserType>findUserType(@Param("uid")String uid);
 }
 
 // KEINE GARANTIE, DASS ES FUNKTIONIERT!

@@ -27,4 +27,8 @@ public class EventService {
     public ArrayList<Event> getAllEvents() {
         return (ArrayList<Event>) eventRepository.findAll();
     }
+
+    public void addUsertoEvent(int userId, int eventId){
+        //ToDo
+    }
 }
