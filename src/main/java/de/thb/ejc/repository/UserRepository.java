@@ -2,6 +2,7 @@ package de.thb.ejc.repository;
 
 import de.thb.ejc.entity.State;
 import de.thb.ejc.entity.User;
+import de.thb.ejc.entity.UserType;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.RepositoryDefinition;

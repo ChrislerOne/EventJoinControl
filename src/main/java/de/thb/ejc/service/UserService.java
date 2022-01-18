@@ -13,7 +13,13 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private QRCodeRepository qrCodeRepository;
 
     public State getStateFromUser(String qrToken) {
         //if (userRepository.findStateByQrToken(qrToken).isPresent())
