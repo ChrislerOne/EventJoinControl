@@ -30,6 +30,7 @@ public class AuthenticationController {
     }
 
 
+
     /** Register User in Database after frontend Firebase registration */
     @PostMapping("/authentication/registerUser")
     public ResponseEntity registerUser(@RequestBody RegisterUserForm registerUserForm) {

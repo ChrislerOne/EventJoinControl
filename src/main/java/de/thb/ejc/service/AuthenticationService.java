@@ -44,8 +44,8 @@ public class AuthenticationService {
         return userRecord;
     }
 
-    public void saveUser(RegisterUserForm registerUserForm) {
-        String uid = registerUserForm.getUid();
+    public void saveUser(RegisterUserForm registerUserForm) throws FirebaseAuthException {
+        String uid = verifyToken(registerUserForm.getIdToken());
         String email = registerUserForm.getEmail();
         String QrToken = DigestUtils.sha256Hex(email);
 
@@ -64,6 +64,7 @@ public class AuthenticationService {
         qrCode.setFile(getQRCode(QrToken));
         qrCodeRepository.save(qrCode);
     }
+
     public String getQRCode(String text){
         int width = 350;
         int height = 350;
