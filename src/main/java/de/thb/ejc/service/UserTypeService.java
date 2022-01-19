@@ -12,6 +12,10 @@ public class UserTypeService {
     private UserTypeRepository userTypeRepository;
 
     public UserType getUserTypeById(int id) {
-        return userTypeRepository.findById(id).get();
+        if (userTypeRepository.findById(id).isPresent()) {
+            return userTypeRepository.findById(id).get();
+        } else {
+            return null;
+        }
     }
 }
