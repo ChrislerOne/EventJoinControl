@@ -1,9 +1,17 @@
 package de.thb.ejc.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 
-@Table(name = "usertypes")
-@Entity
+
+@Getter
+@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Entity(name = "usertypes")
 public class UserType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,13 +19,7 @@ public class UserType {
     private Integer id;
     //TODO Vervollständigen
 
+    private String name;
 
-    // TODO Entfernen
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 }
+
