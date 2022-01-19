@@ -1,6 +1,7 @@
 package de.thb.ejc.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
+import de.thb.ejc.entity.State;
 import de.thb.ejc.entity.UserType;
 import de.thb.ejc.service.AuthenticationService;
 import de.thb.ejc.service.UserTypeService;
@@ -8,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserTypeController {
@@ -23,8 +22,8 @@ public class UserTypeController {
 
     //TODO Endpoint um UserType als Admin zu ändern
 
-    @PostMapping("/usertype/get")
-    public ResponseEntity retrieveUserType(@RequestBody String idToken) {
+    @GetMapping("/usertype/get/{idToken}")
+    public ResponseEntity retrieveUserType(@PathVariable("idToken") String idToken) {
         try {
             String uid = authenticationService.verifyToken(idToken);
             UserType userType = userTypeService.getUserTypeByUid(uid);
