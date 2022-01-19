@@ -6,10 +6,7 @@ import de.thb.ejc.form.RegisterUserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthenticationController {
@@ -30,8 +27,9 @@ public class AuthenticationController {
     }
 
 
-
-    /** Register User in Database after frontend Firebase registration */
+    /**
+     * Register User in Database after frontend Firebase registration
+     */
     @PostMapping("/authentication/registerUser")
     public ResponseEntity registerUser(@RequestBody RegisterUserForm registerUserForm) {
         try {
