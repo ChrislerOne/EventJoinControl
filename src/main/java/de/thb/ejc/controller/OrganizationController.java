@@ -20,7 +20,6 @@ public class OrganizationController {
     private OrganizationService organizationService;
 
     /**
-     *
      * @param organizationForm to deserialize JSON into Java class
      * @return ResponseEntity
      */
@@ -35,7 +34,6 @@ public class OrganizationController {
     }
 
     /**
-     *
      * @return HttpResponse with JSON containing list of Organizations
      */
     @GetMapping("/organizations/list")
