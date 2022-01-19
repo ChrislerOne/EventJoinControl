@@ -1,6 +1,7 @@
 package de.thb.ejc.controller;
 
 import de.thb.ejc.entity.State;
+import de.thb.ejc.service.AuthenticationService;
 import de.thb.ejc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +15,10 @@ public class UserVerificationController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
 
     @GetMapping(value = "/getStatus/{token}")
     public State getStatus(
