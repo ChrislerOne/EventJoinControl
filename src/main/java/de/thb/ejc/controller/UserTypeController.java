@@ -22,8 +22,8 @@ public class UserTypeController {
 
     //TODO Endpoint um UserType als Admin zu ändern
 
-    @GetMapping("/usertype/get/{idToken}")
-    public ResponseEntity retrieveUserType(@PathVariable("idToken") String idToken) {
+    @GetMapping("/usertype/get")
+    public ResponseEntity retrieveUserType(@RequestParam String idToken) {
         try {
             String uid = authenticationService.verifyToken(idToken);
             UserType userType = userTypeService.getUserTypeByUid(uid);
