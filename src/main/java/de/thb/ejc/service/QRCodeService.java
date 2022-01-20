@@ -14,7 +14,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 @Service
-public class QrGenerator {
+public class QRCodeService {
 
     //generator with download option
     public static void generateQRCodeImage(String text, int width, int height, String filePath)

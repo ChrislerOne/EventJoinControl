@@ -5,13 +5,11 @@ import de.thb.ejc.entity.State;
 import de.thb.ejc.form.StateForm;
 import de.thb.ejc.service.AuthenticationService;
 import de.thb.ejc.service.StateService;
+import de.thb.ejc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -23,6 +21,20 @@ public class StateController {
 
     @Autowired
     private StateService stateService;
+
+    @Autowired
+    private UserService userService;
+
+    @GetMapping(value = "/getStatus/{token}")
+    public State getStatus(
+            @PathVariable("token") String authToken) {
+        State state;
+        state = userService.getStateFromUser(authToken);
+        return state;
+
+
+    }
+
 
     @PostMapping("/states/add")
     public ResponseEntity addState(@RequestBody StateForm stateForm, @RequestBody String token) {

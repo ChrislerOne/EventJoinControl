@@ -26,15 +26,15 @@ public class UserService {
         return userRepository.findStateByQrToken(qrToken).get();
     }
 
-    public UserType getUserType(String idToken) throws FirebaseAuthException {
-        String uid = authenticationService.verifyToken(idToken);
-        return userRepository.findUserType(uid).get();
-
-    }
+    //TODO Struktur überdenken
+//    public UserType getUserType(String idToken) throws FirebaseAuthException {
+//        String uid = authenticationService.verifyToken(idToken);
+//        return userRepository.findUserType(uid).get();
+//
+//    }
 
     //TODO Überprüfen der Platzierung
-    public QRCode getQRCodeByUser(String idToken) throws FirebaseAuthException {
-        String uid = authenticationService.verifyToken(idToken);
+    public String getQRCodeDataByUser(String uid) throws FirebaseAuthException {
         return qrCodeRepository.findByUid(uid).get();
     }
 }
