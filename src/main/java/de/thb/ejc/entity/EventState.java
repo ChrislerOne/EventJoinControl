@@ -24,5 +24,4 @@ public class EventState {
     @ManyToOne
     @JoinColumn(name = "stateId")
     private State stateId;
-
 }
