@@ -19,7 +19,7 @@ public class Event {
     private Integer id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "organizationId", nullable = false)
+    @JoinColumn(name = "organizationid", nullable = false)
     private Organization organizationId;
 
     @Column(name = "name", nullable = false)

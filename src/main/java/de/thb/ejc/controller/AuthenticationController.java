@@ -2,7 +2,7 @@ package de.thb.ejc.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import de.thb.ejc.service.AuthenticationService;
-import de.thb.ejc.form.RegisterUserForm;
+import de.thb.ejc.form.user.RegisterUserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

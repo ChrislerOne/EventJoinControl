@@ -1,17 +1,15 @@
 package de.thb.ejc.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
+import de.thb.ejc.form.events.EditEventForm;
 import de.thb.ejc.service.AuthenticationService;
 import de.thb.ejc.service.EventService;
 import de.thb.ejc.entity.Event;
-import de.thb.ejc.form.EventForm;
+import de.thb.ejc.form.events.EventForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -26,14 +24,13 @@ public class EventController {
 
 
     @PostMapping("/events/add")
-    public ResponseEntity addEvent(@RequestBody EventForm eventForm, @RequestBody String token) {
+    public ResponseEntity addEvent(@RequestBody EventForm eventForm, @RequestParam String idToken) {
         try {
             try {
-                String uid = authenticationService.verifyToken(token);
+                String uid = authenticationService.verifyToken(idToken);
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            //ToDo
             eventService.addEvent(eventForm);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
@@ -41,8 +38,39 @@ public class EventController {
         }
     }
 
+    @PostMapping("/events/edit")
+    public ResponseEntity editEvent(@RequestParam String idToken, @RequestBody EditEventForm editEventForm){
+        try {
+            try {
+                String uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            eventService.editEvent(editEventForm);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+
+    @PostMapping("/events/delete")
+    public ResponseEntity deleteEvent(@RequestParam String idToken,@RequestBody int eventid){
+        try {
+            try {
+                String uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            eventService.deleteEvent(eventid);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+
+    }
+
     @GetMapping("/events/list")
-    public ResponseEntity listEvents(@RequestBody String token) {
+    public ResponseEntity listEvents(@RequestParam String token) {
         try {
             try {
                 String uid = authenticationService.verifyToken(token);
@@ -56,4 +84,6 @@ public class EventController {
             return ResponseEntity.internalServerError().body(e);
         }
     }
+
+
 }

@@ -1,4 +1,4 @@
-package de.thb.ejc.form;
+package de.thb.ejc.form.user;
 
 public class RegisterUserForm {
 

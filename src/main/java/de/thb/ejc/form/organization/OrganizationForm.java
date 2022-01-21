@@ -1,7 +1,6 @@
-package de.thb.ejc.form;
+package de.thb.ejc.form.organization;
 
-public class EventForm {
-
+public class OrganizationForm {
     private String name;
 
     public String getName() {

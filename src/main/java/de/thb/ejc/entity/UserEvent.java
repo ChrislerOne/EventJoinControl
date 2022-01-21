@@ -12,15 +12,15 @@ import javax.persistence.*;
 @Entity(name = "user_events")
 public class UserEvent {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "userid", nullable = false)
     private User userId;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "eventId", nullable = false)
+    @JoinColumn(name = "eventid", nullable = false)
     private Event eventId;
 
 }

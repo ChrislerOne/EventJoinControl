@@ -7,7 +7,7 @@ import com.google.firebase.auth.UserRecord;
 import com.google.zxing.WriterException;
 import de.thb.ejc.entity.QRCode;
 import de.thb.ejc.entity.User;
-import de.thb.ejc.form.RegisterUserForm;
+import de.thb.ejc.form.user.RegisterUserForm;
 import de.thb.ejc.repository.QRCodeRepository;
 import de.thb.ejc.repository.UserRepository;
 import org.apache.commons.codec.digest.DigestUtils;
