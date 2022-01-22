@@ -2,8 +2,6 @@ package de.thb.ejc.service;
 
 import de.thb.ejc.entity.*;
 import com.google.firebase.auth.FirebaseAuthException;
-import de.thb.ejc.form.EventStateOrgaHelper;
-import de.thb.ejc.form.events.EditEventForm;
 import de.thb.ejc.repository.EventRepository;
 import de.thb.ejc.repository.QRCodeRepository;
 import de.thb.ejc.repository.UserEventRepository;
@@ -11,7 +9,6 @@ import de.thb.ejc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -31,6 +28,10 @@ public class UserService {
     @Autowired
     private UserEventRepository userEventRepository;
 
+    public UserEvent getSpecificUserEvent(int userid, int eventid) {
+        return userEventRepository.getSpecificUserEvent(userid, eventid);
+    }
+
     public Event getEventById(int id) {
         return eventRepository.findById(id).get();
     }
@@ -38,16 +39,18 @@ public class UserService {
     public State getStateFromUser(String qrToken) {
         //if (userRepository.findStateByQrToken(qrToken).isPresent())
         return userRepository.findStateByQrToken(qrToken).get();
-
     }
 
     public User getUserById(int userId) {
         return userRepository.findById(userId).get();
     }
 
-    public Optional<EventStateOrgaHelper> getAllEventsFromUser(int userid) {
-        return userRepository.findAllEventsFromUser(userid);
+    public User getUserByUid(String uid) {
+        return userRepository.findByUid(uid).get();
+    }
 
+    public ArrayList<Event> getAllEventsFromUser(String uid) {
+        return userRepository.findAllEventsFromUser(uid);
     }
 
     //TODO Struktur überdenken
@@ -72,7 +75,11 @@ public class UserService {
         userEvent.setUserId(user);
         userEvent.setEventId(event);
         userEventRepository.save(userEvent);
+    }
 
+    public void deleteUserFromEvent(int userid, int eventid) {
+        UserEvent userEvent = userEventRepository.getSpecificUserEvent(userid, eventid);
+        userEventRepository.delete(userEvent);
     }
 
     public void deleteUser(int userid) {

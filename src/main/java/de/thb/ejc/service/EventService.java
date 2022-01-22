@@ -4,10 +4,13 @@ import de.thb.ejc.entity.Event;
 import de.thb.ejc.form.events.EditEventForm;
 import de.thb.ejc.form.events.EventForm;
 import de.thb.ejc.repository.EventRepository;
+import de.thb.ejc.repository.OrganizationRepository;
+import de.thb.ejc.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EventService {
@@ -16,35 +19,35 @@ public class EventService {
     private EventRepository eventRepository;
 
     @Autowired
-    private OrganizationService organizationService;
+    private OrganizationRepository organizationRepository;
 
+    @Autowired
+    private StateRepository stateRepository;
 
-
-    public Event getEventById(int id) {
-        return eventRepository.findById(id).get();
-    }
 
     public void addEvent(EventForm eventForm) {
         Event event = new Event();
         event.setName(eventForm.getName());
-        event.setOrganizationId(organizationService.getOrganizationById(eventForm.getOrganizationid()));
+        event.setOrganizationId(organizationRepository.findById(eventForm.getOrganizationid()).get());
+        event.setStateId(stateRepository.findById(1).get());
 
         eventRepository.save(event);
     }
-    public void editEvent(EditEventForm editEventForm){
-         Event currentEvent = eventRepository.findEventByName(editEventForm.getOldname()).get();
-         String newname = editEventForm.getNewname();
-         currentEvent.setName(newname);
-         eventRepository.save(currentEvent);
+
+    public void editEvent(EditEventForm editEventForm) {
+        Event currentEvent = eventRepository.findEventByName(editEventForm.getOldname()).get();
+        String newname = editEventForm.getNewname();
+        currentEvent.setName(newname);
+        eventRepository.save(currentEvent);
     }
 
-    public void deleteEvent(int eventid){
+    public void deleteEvent(int eventid) {
         Event currentEvent = eventRepository.findById(eventid).get();
         eventRepository.delete(currentEvent);
     }
 
-    public ArrayList<Event> getAllEvents() {
-        return (ArrayList<Event>) eventRepository.findAll();
+    public List<Event> getAllEvents() {
+        return (List<Event>) eventRepository.findAll();
     }
 
 

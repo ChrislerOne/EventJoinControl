@@ -1,5 +1,6 @@
 package de.thb.ejc.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,10 @@ public class Event {
     @ManyToOne(optional = false)
     @JoinColumn(name = "organizationid", nullable = false)
     private Organization organizationId;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "stateid", nullable = false)
+    private State stateId;
 
     @Column(name = "name", nullable = false)
     private String name;

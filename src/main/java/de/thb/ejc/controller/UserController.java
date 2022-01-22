@@ -2,8 +2,8 @@ package de.thb.ejc.controller;
 
 
 import com.google.firebase.auth.FirebaseAuthException;
-import de.thb.ejc.entity.UserEvent;
-import de.thb.ejc.form.EventStateOrgaHelper;
+import de.thb.ejc.entity.Event;
+import de.thb.ejc.entity.EventState;
 import de.thb.ejc.form.user.UserEventForm;
 import de.thb.ejc.service.AuthenticationService;
 import de.thb.ejc.service.UserService;
@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import de.thb.ejc.entity.User;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -24,20 +22,38 @@ public class UserController {
     @Autowired
     private AuthenticationService authenticationService;
 
-
     @PostMapping("/user/addtoevent")
-    public ResponseEntity addUserToEvent(@RequestParam String idToken, @RequestBody UserEventForm userEventForm) {
+    public ResponseEntity addUserToEvent(@RequestBody UserEventForm userEventForm, @RequestParam String idToken) {
         try {
-            //try {
-            //    String uid = authenticationService.verifyToken(idToken);
-            //} catch (FirebaseAuthException fe) {
-            //    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            //}
-            //ToDo SQL Fehler
-            int userid = userEventForm.getUserid();
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            int userid = userService.getUserByUid(uid).getId();
             int eventid = userEventForm.getEventid();
             userService.addUsertoEvent(userid, eventid);
             return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+
+    @DeleteMapping("/user/deleteFromEvent")
+    public ResponseEntity deleteFromEvent(@RequestBody UserEventForm userEventForm, @RequestParam String idToken) {
+        try {
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            int userid = userService.getUserByUid(uid).getId();
+            int eventid = userEventForm.getEventid();
+            userService.deleteUserFromEvent(userid, eventid);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
@@ -60,15 +76,16 @@ public class UserController {
     }
 
     @GetMapping("/user/getevents")
-    public ResponseEntity getEventsFromUser(@RequestParam String idToken, @RequestParam int userid) {
+    public ResponseEntity getEventsFromUser(@RequestParam String idToken) {
         try {
-//            try {
-//                String uid = authenticationService.verifyToken(idToken);
-//            } catch (FirebaseAuthException fe) {
-//                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//            }
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
             //ToDo auf uid ändern
-            Optional<EventStateOrgaHelper> result = userService.getAllEventsFromUser(userid);
+            ArrayList<Event> result = userService.getAllEventsFromUser(uid);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class EventController {
@@ -39,7 +40,7 @@ public class EventController {
     }
 
     @PostMapping("/events/edit")
-    public ResponseEntity editEvent(@RequestParam String idToken, @RequestBody EditEventForm editEventForm){
+    public ResponseEntity editEvent(@RequestParam String idToken, @RequestBody EditEventForm editEventForm) {
         try {
             try {
                 String uid = authenticationService.verifyToken(idToken);
@@ -54,7 +55,7 @@ public class EventController {
     }
 
     @PostMapping("/events/delete")
-    public ResponseEntity deleteEvent(@RequestParam String idToken,@RequestBody int eventid){
+    public ResponseEntity deleteEvent(@RequestParam String idToken, @RequestBody int eventid) {
         try {
             try {
                 String uid = authenticationService.verifyToken(idToken);
@@ -70,15 +71,15 @@ public class EventController {
     }
 
     @GetMapping("/events/list")
-    public ResponseEntity listEvents(@RequestParam String token) {
+    public ResponseEntity listEvents(@RequestParam String idToken) {
         try {
             try {
-                String uid = authenticationService.verifyToken(token);
+                String uid = authenticationService.verifyToken(idToken);
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
             //ToDo
-            ArrayList<Event> events = eventService.getAllEvents();
+            List<Event> events = eventService.getAllEvents();
             return ResponseEntity.status(HttpStatus.OK).body(events);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
