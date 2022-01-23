@@ -31,8 +31,6 @@ public class StateController {
         State state;
         state = userService.getStateFromUser(authToken);
         return state;
-
-
     }
 
 

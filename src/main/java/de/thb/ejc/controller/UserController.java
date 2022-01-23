@@ -25,6 +25,8 @@ public class UserController {
     private UserTypeService userTypeService;
     @Autowired
     private OrganizationService organizationService;
+    @Autowired
+    private EventService eventService;
 
     @PostMapping("/user/addtoevent")
     public ResponseEntity addUserToEvent(@RequestBody UserEventForm userEventForm, @RequestParam String idToken) {
@@ -128,6 +130,23 @@ public class UserController {
             int userid = userService.getUserByUid(uid).getId();
             ArrayList<OrgaUserType> result = orgaUserTypeService.getAllOrgsByUser(userid);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+
+    @PostMapping("/user/positiveuser")
+    public  ResponseEntity changeUserStates(@RequestParam String idToken, @RequestBody String uid){
+        try {
+          //  try {
+            //    String uid = authenticationService.verifyToken(idToken);
+            //} catch (FirebaseAuthException fe) {
+             //   return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            //}
+            //ToDo Requestbody löschen
+            ArrayList<Event> events = userService.getAllEventsFromUser(uid);
+            eventService.changeStateToPositiv(events);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

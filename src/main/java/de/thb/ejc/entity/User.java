@@ -3,6 +3,7 @@ package de.thb.ejc.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -31,4 +32,6 @@ public class User {
     @Column(name = "qrtoken")
     private String qrToken;
 
+    @Column(name = "statetimestamp")
+    private LocalDateTime statetimestamp;
 }

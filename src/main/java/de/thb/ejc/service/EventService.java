@@ -1,6 +1,8 @@
 package de.thb.ejc.service;
 
 import de.thb.ejc.entity.Event;
+import de.thb.ejc.entity.State;
+import de.thb.ejc.entity.User;
 import de.thb.ejc.form.events.EditEventForm;
 import de.thb.ejc.form.events.EventForm;
 import de.thb.ejc.repository.EventRepository;
@@ -9,6 +11,7 @@ import de.thb.ejc.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,5 +59,19 @@ public class EventService {
 
     public ArrayList<Event> getAllEventsByOrganization(int organizationId) {
         return eventRepository.findEventsByOrganization(organizationId);
+    }
+
+    public void changeStateToPositiv(ArrayList<Event> events) {
+        events.forEach(event -> changeEvent(event.getId()));
+    }
+    public void changeEvent(int eventId){
+        ArrayList<User> userToChange = eventRepository.findAllUserFromEvent(eventId);
+        if (stateRepository.findById(2).isPresent()) {
+            userToChange.forEach(this::changeUser);
+        }
+    }
+    public void changeUser(User user){
+        user.setState(stateRepository.findById(2).get());
+        user.setStatetimestamp(LocalDateTime.now());
     }
 }
