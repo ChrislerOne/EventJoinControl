@@ -44,13 +44,17 @@ public class EventService {
     }
 
     public void deleteEvent(int eventid) {
-        Event currentEvent = eventRepository.findById(eventid).get();
-        eventRepository.delete(currentEvent);
+        if (eventRepository.findById(eventid).isPresent()) {
+            Event currentEvent = eventRepository.findById(eventid).get();
+            eventRepository.delete(currentEvent);
+        }
     }
 
     public List<Event> getAllEvents() {
         return (List<Event>) eventRepository.findAll();
     }
 
-
+    public ArrayList<Event> getAllEventsByOrganization(int organizationId) {
+        return eventRepository.findEventsByOrganization(organizationId);
+    }
 }

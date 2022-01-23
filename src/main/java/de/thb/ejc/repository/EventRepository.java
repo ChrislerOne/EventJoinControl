@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.data.repository.query.Param;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RepositoryDefinition(domainClass = Event.class, idClass = Long.class)
@@ -15,5 +16,8 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 
     @Query("select e from events e WHERE e.name = :name")
     Optional<Event> findEventByName(@Param("name") String name);
+
+    @Query("select e from events e WHERE e.organizationId.id = :organizationid")
+    ArrayList<Event> findEventsByOrganization(@Param("organizationid") int organizationId);
 
 }

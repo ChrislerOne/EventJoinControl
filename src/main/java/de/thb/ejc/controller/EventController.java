@@ -54,20 +54,19 @@ public class EventController {
         }
     }
 
-    @PostMapping("/events/delete")
-    public ResponseEntity deleteEvent(@RequestParam String idToken, @RequestBody int eventid) {
+    @DeleteMapping("/events/delete")
+    public ResponseEntity deleteEvent(@RequestParam String idToken, @RequestParam int eventId) {
         try {
             try {
                 String uid = authenticationService.verifyToken(idToken);
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            eventService.deleteEvent(eventid);
+            eventService.deleteEvent(eventId);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
-
     }
 
     @GetMapping("/events/list")
@@ -78,7 +77,6 @@ public class EventController {
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            //ToDo
             List<Event> events = eventService.getAllEvents();
             return ResponseEntity.status(HttpStatus.OK).body(events);
         } catch (Exception e) {
@@ -86,5 +84,20 @@ public class EventController {
         }
     }
 
+    @GetMapping("/events/getbyorganization")
+    public ResponseEntity listEventsByOrganization(@RequestParam String idToken, @RequestParam int organizationId) {
+        try {
+            try {
+                String uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            ArrayList<Event> events = eventService.getAllEventsByOrganization(organizationId);
+            return ResponseEntity.status(HttpStatus.OK).body(events);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
 
 }

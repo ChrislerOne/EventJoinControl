@@ -16,4 +16,6 @@ public interface UserEventRepository extends CrudRepository<UserEvent, Long> {
 
     @Query("SELECT ue from user_events ue WHERE ue.userId.id = :userid AND ue.eventId.id = :eventid")
     UserEvent getSpecificUserEvent(@Param("userid") int userId, @Param("eventid") int eventid);
+
 }
+

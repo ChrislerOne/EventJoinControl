@@ -15,5 +15,4 @@ public class EventForm {
 
     private LocalDateTime eventend;
 
-
 }

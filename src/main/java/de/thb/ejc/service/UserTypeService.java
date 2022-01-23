@@ -5,6 +5,8 @@ import de.thb.ejc.repository.UserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class UserTypeService {
 
@@ -17,6 +19,14 @@ public class UserTypeService {
         } else {
             return null;
         }
+    }
+
+    public UserType getUserTypeByName(String name) {
+        return userTypeRepository.findByName(name);
+    }
+
+    public ArrayList<UserType> getAllUserTypes() {
+        return (ArrayList<UserType>) userTypeRepository.findAll();
     }
 
 //    public UserType getUserTypeByUid(String uid) {

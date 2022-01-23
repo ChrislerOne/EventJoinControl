@@ -24,18 +24,6 @@ public class QrCodeController {
 
     @Autowired
     UserService userService;
-//    //TODO Remove
-//    private static final int width = 350;
-//    private static final int height = 350;
-//
-
-//
-//    @GetMapping(value = "/genrateQRCode/{codeText}")
-//    public ResponseEntity<byte[]> generateQRCode(
-//            @PathVariable("codeText") String codeText)
-//            throws Exception {
-//        return ResponseEntity.status(HttpStatus.OK).body(QRCodeService.getQRCodeImage(codeText, width, height));
-//    }
 
     @GetMapping(value = "/qrcode/get")
     public ResponseEntity viewQRCode(@RequestParam String idToken) {

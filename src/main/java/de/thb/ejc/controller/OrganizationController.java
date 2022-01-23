@@ -92,4 +92,22 @@ public class OrganizationController {
             return ResponseEntity.internalServerError().body(e);
         }
     }
+
+    /**
+     * @return HttpResponse with JSON containing list of a specific Organization
+     */
+    @GetMapping("/organizations/getbyid")
+    public ResponseEntity getSpecificOrganization(@RequestParam String idToken, @RequestBody int organizationid) {
+        try {
+            try {
+                String uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            Organization organizations = organizationService.getOrganizationById(organizationid);
+            return ResponseEntity.status(HttpStatus.OK).body(organizations);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
 }

@@ -29,5 +29,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
             "INNER JOIN user_events ue ON e.id = ue.eventId.id " +
             "WHERE ue.userId.uid = :uid")
     ArrayList<Event> findAllEventsFromUser(@Param("uid") String uid);
+
+
+    @Query("SELECT u from user u WHERE u.email = :email")
+    User getUserByEmail(@Param("email") String email);
+
 }
 

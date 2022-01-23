@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface UserTypeRepository extends CrudRepository<UserType, Integer> {
     Optional<UserType> findById(int id);
 
-//    @Query("SELECT ut FROM usertypes ut INNER JOIN user u ON ut.id = u.userType.id WHERE u.uid = :uid")
-//    Optional<UserType> findByUid(@Param("uid") String uid);
+    @Query("SELECT ut FROM usertypes ut WHERE ut.name = :name")
+    UserType findByName(@Param("name") String name);
 }

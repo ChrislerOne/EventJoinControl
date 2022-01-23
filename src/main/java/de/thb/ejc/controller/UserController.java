@@ -2,20 +2,16 @@ package de.thb.ejc.controller;
 
 
 import com.google.firebase.auth.FirebaseAuthException;
-import de.thb.ejc.entity.Event;
-import de.thb.ejc.entity.EventState;
-import de.thb.ejc.entity.OrgaUserType;
+import de.thb.ejc.entity.*;
+import de.thb.ejc.form.orgaUserType.OrgaUserTypeForm;
 import de.thb.ejc.form.user.UserEventForm;
-import de.thb.ejc.service.AuthenticationService;
-import de.thb.ejc.service.OrgaUserTypeService;
-import de.thb.ejc.service.UserService;
+import de.thb.ejc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -25,6 +21,10 @@ public class UserController {
     private AuthenticationService authenticationService;
     @Autowired
     private OrgaUserTypeService orgaUserTypeService;
+    @Autowired
+    private UserTypeService userTypeService;
+    @Autowired
+    private OrganizationService organizationService;
 
     @PostMapping("/user/addtoevent")
     public ResponseEntity addUserToEvent(@RequestBody UserEventForm userEventForm, @RequestParam String idToken) {
@@ -72,7 +72,26 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
             userService.deleteUser(userid);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+
+    }
+
+    @PostMapping("/user/grantpermission")
+    public ResponseEntity grantPermissionToOrganization(@RequestParam String idToken, @RequestBody OrgaUserTypeForm orgaUserTypeForm) {
+        try {
+            try {
+                String uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            User user = userService.getUserByEmail(orgaUserTypeForm.getEmail());
+            UserType usertypeId = userTypeService.getUserTypeById(orgaUserTypeForm.getUserTypeId());
+            Organization organization = organizationService.getOrganizationById(orgaUserTypeForm.getOrganizationId());
+            userService.addUserToOrganization(user, organization, usertypeId);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

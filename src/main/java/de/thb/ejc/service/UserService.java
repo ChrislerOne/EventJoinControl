@@ -2,10 +2,7 @@ package de.thb.ejc.service;
 
 import de.thb.ejc.entity.*;
 import com.google.firebase.auth.FirebaseAuthException;
-import de.thb.ejc.repository.EventRepository;
-import de.thb.ejc.repository.QRCodeRepository;
-import de.thb.ejc.repository.UserEventRepository;
-import de.thb.ejc.repository.UserRepository;
+import de.thb.ejc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +25,15 @@ public class UserService {
     @Autowired
     private UserEventRepository userEventRepository;
 
+    @Autowired
+    private OrgaUserTypeRepository orgaUserTypeRepository;
+
     public UserEvent getSpecificUserEvent(int userid, int eventid) {
         return userEventRepository.getSpecificUserEvent(userid, eventid);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
     }
 
     public Event getEventById(int id) {
@@ -87,6 +91,14 @@ public class UserService {
             User currentUser = userRepository.findById(userid).get();
             userRepository.delete(currentUser);
         }
+    }
+
+    public void addUserToOrganization(User user, Organization organization, UserType usertype) {
+        OrgaUserType orgaUserType = new OrgaUserType();
+        orgaUserType.setOrganization(organization);
+        orgaUserType.setUserType(usertype);
+        orgaUserType.setUser(user);
+        orgaUserTypeRepository.save(orgaUserType);
     }
 
 }

@@ -1,6 +1,7 @@
 package de.thb.ejc.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
+import de.thb.ejc.entity.Organization;
 import de.thb.ejc.entity.State;
 import de.thb.ejc.entity.UserType;
 import de.thb.ejc.service.AuthenticationService;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 public class UserTypeController {
 
@@ -20,19 +23,19 @@ public class UserTypeController {
     @Autowired
     UserTypeService userTypeService;
 
-    //TODO Endpoint um UserType als Admin zu ändern
+    @GetMapping("/usertypes/list")
+    public ResponseEntity getAllUserTypes(@RequestParam String idToken) {
+        try {
+            try {
+                String uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            ArrayList<UserType> userTypeArrayList = userTypeService.getAllUserTypes();
+            return ResponseEntity.status(HttpStatus.OK).body(userTypeArrayList);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
 
-//    @GetMapping("/usertype/get")
-//    public ResponseEntity retrieveUserType(@RequestParam String idToken) {
-//        try {
-//            String uid = authenticationService.verifyToken(idToken);
-//            UserType userType = userTypeService.getUserTypeByUid(uid);
-//            return ResponseEntity.status(HttpStatus.OK).body(userType);
-//        } catch (FirebaseAuthException fe) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//        } catch (Exception e) {
-//            return ResponseEntity.internalServerError().body(e);
-//        }
-//
-//    }
 }
