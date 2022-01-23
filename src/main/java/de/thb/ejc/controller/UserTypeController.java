@@ -22,17 +22,17 @@ public class UserTypeController {
 
     //TODO Endpoint um UserType als Admin zu ändern
 
-    @GetMapping("/usertype/get")
-    public ResponseEntity retrieveUserType(@RequestParam String idToken) {
-        try {
-            String uid = authenticationService.verifyToken(idToken);
-            UserType userType = userTypeService.getUserTypeByUid(uid);
-            return ResponseEntity.status(HttpStatus.OK).body(userType);
-        } catch (FirebaseAuthException fe) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e);
-        }
-
-    }
+//    @GetMapping("/usertype/get")
+//    public ResponseEntity retrieveUserType(@RequestParam String idToken) {
+//        try {
+//            String uid = authenticationService.verifyToken(idToken);
+//            UserType userType = userTypeService.getUserTypeByUid(uid);
+//            return ResponseEntity.status(HttpStatus.OK).body(userType);
+//        } catch (FirebaseAuthException fe) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().body(e);
+//        }
+//
+//    }
 }

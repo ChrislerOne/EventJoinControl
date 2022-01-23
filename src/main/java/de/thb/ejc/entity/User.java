@@ -22,10 +22,6 @@ public class User {
     @JoinColumn(name = "stateid")
     private State state;
 
-    @OneToOne
-    @JoinColumn(name = "usertypeid")
-    private UserType userType;
-
     @Column(name = "uid")
     private String uid;
 

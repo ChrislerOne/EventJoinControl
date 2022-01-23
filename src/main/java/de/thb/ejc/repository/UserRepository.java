@@ -21,8 +21,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<State> findStateByQrToken(@Param("qrToken") String qrToken);
 
 
-    @Query("SELECT u.userType FROM user u WHERE u.uid = :uid")
-    Optional<UserType> findUserType(@Param("uid") String uid);
+//    @Query("SELECT u.userType FROM user u WHERE u.uid = :uid")
+//    Optional<UserType> findUserType(@Param("uid") String uid);
 
 
     @Query("SELECT e FROM events e " +

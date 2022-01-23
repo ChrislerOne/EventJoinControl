@@ -30,6 +30,8 @@ public class EventService {
         event.setName(eventForm.getName());
         event.setOrganizationId(organizationRepository.findById(eventForm.getOrganizationid()).get());
         event.setStateId(stateRepository.findById(1).get());
+        event.setEventStart(eventForm.getEventstart());
+        event.setEventEnd(eventForm.getEventend());
 
         eventRepository.save(event);
     }

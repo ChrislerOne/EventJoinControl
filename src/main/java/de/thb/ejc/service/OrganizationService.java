@@ -25,18 +25,17 @@ public class OrganizationService {
         organizationRepository.save(organization);
     }
 
-    public void editOrganization(EditOrganizationForm editOrganizationForm){
+    public void editOrganization(EditOrganizationForm editOrganizationForm) {
         Organization currentOrganization = organizationRepository.findEventByName(editOrganizationForm.getOldname()).get();
         String newname = editOrganizationForm.getNewname();
         currentOrganization.setName(newname);
         organizationRepository.save(currentOrganization);
     }
 
-    public void deleteOrganization(int organizationid){
+    public void deleteOrganization(int organizationid) {
         Organization currentOrganization = organizationRepository.findById(organizationid).get();
         organizationRepository.delete(currentOrganization);
     }
-
 
     public ArrayList<Organization> getAllOrganizations() {
         return (ArrayList<Organization>) organizationRepository.findAll();

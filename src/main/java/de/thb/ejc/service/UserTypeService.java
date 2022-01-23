@@ -19,12 +19,12 @@ public class UserTypeService {
         }
     }
 
-    public UserType getUserTypeByUid(String uid) {
-        if (userTypeRepository.findByUid(uid).isPresent()) {
-            return userTypeRepository.findByUid(uid).get();
-        } else {
-            return null;
-        }
-
-    }
+//    public UserType getUserTypeByUid(String uid) {
+//        if (userTypeRepository.findByUid(uid).isPresent()) {
+//            return userTypeRepository.findByUid(uid).get();
+//        } else {
+//            return null;
+//        }
+//
+//    }
 }

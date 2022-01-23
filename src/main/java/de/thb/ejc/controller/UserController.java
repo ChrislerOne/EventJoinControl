@@ -4,8 +4,10 @@ package de.thb.ejc.controller;
 import com.google.firebase.auth.FirebaseAuthException;
 import de.thb.ejc.entity.Event;
 import de.thb.ejc.entity.EventState;
+import de.thb.ejc.entity.OrgaUserType;
 import de.thb.ejc.form.user.UserEventForm;
 import de.thb.ejc.service.AuthenticationService;
+import de.thb.ejc.service.OrgaUserTypeService;
 import de.thb.ejc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AuthenticationService authenticationService;
+    @Autowired
+    private OrgaUserTypeService orgaUserTypeService;
 
     @PostMapping("/user/addtoevent")
     public ResponseEntity addUserToEvent(@RequestBody UserEventForm userEventForm, @RequestParam String idToken) {
@@ -90,6 +94,25 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
+    }
 
+    @GetMapping("/user/permissions")
+    public ResponseEntity getAllPermissionsFromUser(@RequestParam String idToken) {
+        try {
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            int userid = userService.getUserByUid(uid).getId();
+            ArrayList<OrgaUserType> result = orgaUserTypeService.getAllOrgsByUser(userid);
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
     }
 }
+
+

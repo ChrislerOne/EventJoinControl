@@ -45,7 +45,7 @@ public class OrganizationController {
     }
 
     @PostMapping("/organizations/edit")
-    public ResponseEntity editEvent(@RequestParam String idToken, @RequestBody EditOrganizationForm editOrganizationForm){
+    public ResponseEntity editEvent(@RequestParam String idToken, @RequestBody EditOrganizationForm editOrganizationForm) {
         try {
             try {
                 String uid = authenticationService.verifyToken(idToken);
@@ -60,7 +60,7 @@ public class OrganizationController {
     }
 
     @PostMapping("/organizations/delete")
-    public ResponseEntity deleteEvent(@RequestParam String idToken,@RequestBody int organizationid){
+    public ResponseEntity deleteEvent(@RequestParam String idToken, @RequestBody int organizationid) {
         try {
             try {
                 String uid = authenticationService.verifyToken(idToken);
@@ -74,18 +74,18 @@ public class OrganizationController {
         }
 
     }
+
     /**
      * @return HttpResponse with JSON containing list of Organizations
      */
     @GetMapping("/organizations/list")
-    public ResponseEntity listOrganizations(@RequestParam String token) {
+    public ResponseEntity listOrganizations(@RequestParam String idToken) {
         try {
             try {
-                String uid = authenticationService.verifyToken(token);
+                String uid = authenticationService.verifyToken(idToken);
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            //ToDo
             ArrayList<Organization> organizations = organizationService.getAllOrganizations();
             return ResponseEntity.status(HttpStatus.OK).body(organizations);
         } catch (Exception e) {

@@ -1,9 +1,11 @@
 package de.thb.ejc.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,5 +31,11 @@ public class Event {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "eventstart", nullable = false)
+    private LocalDateTime eventStart;
+
+    @Column(name = "eventend", nullable = false)
+    private LocalDateTime eventEnd;
 
 }

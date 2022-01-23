@@ -5,9 +5,13 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import com.google.zxing.WriterException;
+import de.thb.ejc.entity.OrgaUserType;
+import de.thb.ejc.entity.Organization;
 import de.thb.ejc.entity.QRCode;
 import de.thb.ejc.entity.User;
 import de.thb.ejc.form.user.RegisterUserForm;
+import de.thb.ejc.repository.OrgaUserTypeRepository;
+import de.thb.ejc.repository.OrganizationRepository;
 import de.thb.ejc.repository.QRCodeRepository;
 import de.thb.ejc.repository.UserRepository;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -28,6 +32,10 @@ public class AuthenticationService {
     UserRepository userRepository;
     @Autowired
     QRCodeRepository qrCodeRepository;
+    @Autowired
+    OrganizationRepository organizationRepository;
+    @Autowired
+    OrgaUserTypeRepository orgaUserTypeRepository;
 
     public String verifyToken(String idToken) throws FirebaseAuthException {
 
@@ -49,8 +57,6 @@ public class AuthenticationService {
         String qrToken = DigestUtils.sha256Hex(email);
 
         User user = new User();
-        //TODO Multiple User types on registration
-        user.setUserType(userTypeService.getUserTypeById(10));
         user.setState(stateService.getStateById(1));
         user.setUid(uid);
         user.setEmail(email);
@@ -62,9 +68,19 @@ public class AuthenticationService {
         qrCode.setUser(user);
         qrCode.setFile(setQRCode(qrToken));
         qrCodeRepository.save(qrCode);
+
+        //SET USER TYPE FOR EVERY ORGANIZATION
+        Iterable<Organization> allOrgs = organizationRepository.findAll();
+        for (Organization org : allOrgs) {
+            OrgaUserType orgaUserType = new OrgaUserType();
+            orgaUserType.setUser(user);
+            orgaUserType.setUserType(userTypeService.getUserTypeById(10));
+            orgaUserType.setOrganization(org);
+            orgaUserTypeRepository.save(orgaUserType);
+        }
     }
 
-    public String setQRCode(String text){
+    public String setQRCode(String text) {
         int width = 350;
         int height = 350;
         byte[] image = new byte[0];
