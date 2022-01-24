@@ -1,6 +1,7 @@
 package de.thb.ejc.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
+import de.thb.ejc.entity.State;
 import de.thb.ejc.form.events.EditEventForm;
 import de.thb.ejc.form.organization.EditOrganizationForm;
 import de.thb.ejc.service.AuthenticationService;
@@ -103,13 +104,32 @@ public class OrganizationController {
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            Organization organizations = organizationService.getOrganizationById(organizationid);
-            return ResponseEntity.status(HttpStatus.OK).body(organizations);
+            Organization organization = organizationService.getOrganizationById(organizationid);
+            return ResponseEntity.status(HttpStatus.OK).body(organization);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
     }
 
-    //ToDo Get all needed states from Organization
-    //@GetMapping("/organization/")
+    /**
+     *
+     * @param idToken to get uid
+     * @param organizationid
+     * @return JSON containing every required state for given organization
+     */
+    @GetMapping("/organization/listorganizationstates")
+    public ResponseEntity listOrganizationStates(@RequestParam String idToken, @RequestBody int organizationid) {
+        try {
+            try {
+                String uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            ArrayList<State> states = organizationService.getStatesByOrganizationId(organizationid);
+
+            return ResponseEntity.status(HttpStatus.OK).body(states);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
 }

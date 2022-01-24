@@ -2,9 +2,11 @@ package de.thb.ejc.service;
 
 import de.thb.ejc.entity.Event;
 import de.thb.ejc.entity.Organization;
+import de.thb.ejc.entity.State;
 import de.thb.ejc.form.organization.EditOrganizationForm;
 import de.thb.ejc.form.organization.OrganizationForm;
 import de.thb.ejc.repository.OrganizationRepository;
+import de.thb.ejc.repository.OrganizationStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ import java.util.ArrayList;
 public class OrganizationService {
     @Autowired
     private OrganizationRepository organizationRepository;
+
+    @Autowired
+    private OrganizationStateRepository organizationStateRepository;
 
     public Organization getOrganizationById(int id) {
         return organizationRepository.findById(id).get();
@@ -39,5 +44,12 @@ public class OrganizationService {
 
     public ArrayList<Organization> getAllOrganizations() {
         return (ArrayList<Organization>) organizationRepository.findAll();
+    }
+
+    public ArrayList<State> getStatesByOrganizationId(int organizationId) {
+        if(!organizationStateRepository.findStatesByOrganizationId(organizationId).isEmpty()) {
+            return organizationStateRepository.findStatesByOrganizationId(organizationId);
+        }
+        return null;
     }
 }
