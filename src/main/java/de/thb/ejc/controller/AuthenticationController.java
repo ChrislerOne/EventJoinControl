@@ -14,7 +14,7 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    //TODO Check if works with GET
+
     @GetMapping("/authentication/checkAuth")
     public ResponseEntity checkAuth(@RequestBody String token) {
         try {

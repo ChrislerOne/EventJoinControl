@@ -34,5 +34,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query("SELECT u from user u WHERE u.email = :email")
     User getUserByEmail(@Param("email") String email);
 
+    @Query("SELECT u from user u WHERE u.state.id = 3")
+    ArrayList<User> findAllInfectedUser();
+
+    @Query("SELECT u FROM user u WHERE u.qrToken = :qrToken")
+    User findUserByQRToken(@Param("qrToken") String qrToken);
 }
 

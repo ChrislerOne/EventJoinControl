@@ -6,12 +6,19 @@ import de.thb.ejc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
+
+    @Autowired
+    EventService eventService;
+
+    @Autowired
+    StateService stateService;
 
     @Autowired
     private UserRepository userRepository;
@@ -41,7 +48,7 @@ public class UserService {
     }
 
     public State getStateFromUser(String qrToken) {
-        //if (userRepository.findStateByQrToken(qrToken).isPresent())
+        refreshStatus(getUserByQRToken(qrToken).getUid());
         return userRepository.findStateByQrToken(qrToken).get();
     }
 
@@ -53,16 +60,13 @@ public class UserService {
         return userRepository.findByUid(uid).get();
     }
 
+    public User getUserByQRToken(String qrToken) {
+        return userRepository.findUserByQRToken(qrToken);
+    }
+
     public ArrayList<Event> getAllEventsFromUser(String uid) {
         return userRepository.findAllEventsFromUser(uid);
     }
-
-    //TODO Struktur überdenken
-//    public UserType getUserType(String idToken) throws FirebaseAuthException {
-//        String uid = authenticationService.verifyToken(idToken);
-//        return userRepository.findUserType(uid).get();
-//
-//    }
 
     //TODO Überprüfen der Platzierung
     public String getQRCodeDataByUser(String uid) throws FirebaseAuthException {
@@ -71,7 +75,7 @@ public class UserService {
 
     }
 
-    public void addUsertoEvent(int userId, int eventId) {
+    public void addUserToEvent(int userId, int eventId) {
         Event event = getEventById(eventId);
         User user = getUserById(userId);
         UserEvent userEvent = new UserEvent();
@@ -99,6 +103,29 @@ public class UserService {
         orgaUserType.setUserType(usertype);
         orgaUserType.setUser(user);
         orgaUserTypeRepository.save(orgaUserType);
+    }
+
+    public void reportPositiveUser(String uid) {
+
+        ArrayList<Event> events = getAllEventsFromUser(uid);
+        eventService.changeStateToPositiv(events);
+        User user = getUserByUid(uid);
+        user.setState(stateService.getStateById(6));
+        user.setStatetimestamp(LocalDateTime.now());
+        userRepository.save(user);
+    }
+
+    public ArrayList<User> getAllInfectedUser() {
+        return userRepository.findAllInfectedUser();
+    }
+
+    public void refreshStatus(String uid) {
+        User user = getUserByUid(uid);
+        if ((user.getState().getId() == 6 || user.getState().getId() == 7) && user.getStatetimestamp().isBefore(LocalDateTime.now().minusDays(14)) ) {
+            user.setState(stateService.getStateById(1));
+            user.setStatetimestamp(null);
+            userRepository.save(user);
+        }
     }
 
 }

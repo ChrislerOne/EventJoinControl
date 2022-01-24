@@ -17,7 +17,6 @@ public class UserType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-    //TODO Vervollständigen
 
     private String name;
 
