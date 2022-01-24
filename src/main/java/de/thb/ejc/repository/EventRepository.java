@@ -24,4 +24,7 @@ public interface EventRepository extends CrudRepository<Event, Long> {
     @Query("select u from user u join user_events ue on u.id = ue.userId.id where ue.eventId.id = :eventId")
     ArrayList<User> findAllUserFromEvent(@Param("eventId") int eventId);
 
+    @Query("select COUNT(u) from user u join user_events ue on u.id = ue.userId.id where ue.eventId.id = :eventId")
+    int countAllUserFromEvent(@Param("eventId") int eventId);
+
 }

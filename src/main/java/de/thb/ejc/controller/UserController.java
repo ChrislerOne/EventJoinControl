@@ -135,7 +135,7 @@ public class UserController {
     }
 
     @PostMapping("/user/positiveuser")
-    public  ResponseEntity changeUserStates(@RequestParam String idToken){
+    public ResponseEntity changeUserStates(@RequestParam String idToken) {
         try {
             String uid;
             try {

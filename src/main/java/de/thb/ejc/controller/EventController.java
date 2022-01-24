@@ -100,7 +100,19 @@ public class EventController {
         }
     }
 
-
+    @GetMapping("/events/countuser")
+    public ResponseEntity countUser(@RequestParam String idToken, @RequestParam int eventid){
+        try {
+            //    String uid = authenticationService.verifyToken(idToken);
+            //} catch (FirebaseAuthException fe) {
+            //    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            //}
+            int number = eventService.countEventUser(eventid);
+            return ResponseEntity.status(HttpStatus.OK).body(number);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
 
 
 
