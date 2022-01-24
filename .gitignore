@@ -159,4 +159,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # Google Firebase Credentials
-ejc-credentials.json
+src/main/resources/config/ejc-credentials.json

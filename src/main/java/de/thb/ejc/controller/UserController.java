@@ -109,7 +109,6 @@ public class UserController {
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            //ToDo auf uid ändern
             ArrayList<Event> result = userService.getAllEventsFromUser(uid);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
@@ -136,14 +135,14 @@ public class UserController {
     }
 
     @PostMapping("/user/positiveuser")
-    public  ResponseEntity changeUserStates(@RequestParam String idToken, @RequestBody String uid){
+    public ResponseEntity changeUserStates(@RequestParam String idToken) {
+        String uid;
         try {
-          //  try {
-            //    String uid = authenticationService.verifyToken(idToken);
-            //} catch (FirebaseAuthException fe) {
-             //   return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            //}
-            //ToDo Requestbody löschen
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
             ArrayList<Event> events = userService.getAllEventsFromUser(uid);
             eventService.changeStateToPositiv(events);
             return ResponseEntity.status(HttpStatus.OK).build();
