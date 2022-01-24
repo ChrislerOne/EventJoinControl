@@ -135,17 +135,14 @@ public class UserController {
     }
 
     @PostMapping("/user/positiveuser")
-    public ResponseEntity changeUserStates(@RequestParam String idToken) {
-        String uid;
+    public  ResponseEntity changeUserStates(@RequestParam String idToken){
         try {
+            String uid;
             try {
                 uid = authenticationService.verifyToken(idToken);
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-
-            ArrayList<Event> events = userService.getAllEventsFromUser(uid);
-            eventService.changeStateToPositiv(events);
 
             userService.reportPositiveUser(uid);
             return ResponseEntity.status(HttpStatus.OK).build();
