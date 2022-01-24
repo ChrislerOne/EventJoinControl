@@ -36,7 +36,6 @@ public class OrganizationController {
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            //ToDo
             organizationService.addOrganization(organizationForm);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
@@ -110,4 +109,7 @@ public class OrganizationController {
             return ResponseEntity.internalServerError().body(e);
         }
     }
+
+    //ToDo Get all needed states from Organization
+    //@GetMapping("/organization/")
 }

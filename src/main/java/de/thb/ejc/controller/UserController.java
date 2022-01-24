@@ -40,7 +40,7 @@ public class UserController {
 
             int userid = userService.getUserByUid(uid).getId();
             int eventid = userEventForm.getEventid();
-            userService.addUsertoEvent(userid, eventid);
+            userService.addUserToEvent(userid, eventid);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
@@ -109,7 +109,6 @@ public class UserController {
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            //ToDo auf uid ändern
             ArrayList<Event> result = userService.getAllEventsFromUser(uid);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (Exception e) {
@@ -136,17 +135,51 @@ public class UserController {
     }
 
     @PostMapping("/user/positiveuser")
-    public  ResponseEntity changeUserStates(@RequestParam String idToken, @RequestBody String uid){
+    public  ResponseEntity changeUserStates(@RequestParam String idToken){
         try {
-          //  try {
-            //    String uid = authenticationService.verifyToken(idToken);
-            //} catch (FirebaseAuthException fe) {
-             //   return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            //}
-            //ToDo Requestbody löschen
-            ArrayList<Event> events = userService.getAllEventsFromUser(uid);
-            eventService.changeStateToPositiv(events);
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            userService.reportPositiveUser(uid);
             return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+
+    @GetMapping("/user/listinfecteduser")
+    public ResponseEntity listAllInfectedUser(@RequestParam String idToken) {
+        try {
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            //ToDo welche User Daten sind benötigt? Ändern in UserRepository
+            ArrayList<User> user = userService.getAllInfectedUser();
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+
+    @PostMapping("/user/refreshstatus")
+    public ResponseEntity refreshStatus(@RequestParam String idToken) {
+        try {
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            userService.refreshStatus(uid);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

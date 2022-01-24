@@ -27,9 +27,9 @@ public class StateController {
 
     @GetMapping(value = "/getStatus/{token}")
     public State getStatus(
-            @PathVariable("token") String authToken) {
+            @PathVariable("token") String qrToken) {
         State state;
-        state = userService.getStateFromUser(authToken);
+        state = userService.getStateFromUser(qrToken);
         return state;
     }
 
@@ -42,7 +42,6 @@ public class StateController {
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            //ToDo
             stateService.addState(stateForm);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
@@ -58,7 +57,6 @@ public class StateController {
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            //ToDo
             ArrayList<State> states = stateService.getAllStates();
             return ResponseEntity.status(HttpStatus.OK).body(states);
         } catch (Exception e) {
