@@ -14,11 +14,11 @@ import java.util.Optional;
 public interface OrganizationStateRepository extends CrudRepository<OrganizationState, Long> {
     Optional<OrganizationState> findById(long id);
 
-    @Query("SELECT s FROM organization_state os INNER JOIN states s ON s.id = os.stateId.id WHERE os.organizationId.id = :organizationId")
-    ArrayList<State> findStatesByOrganizationId(int organizationId);
+    @Query("SELECT os FROM organization_state os INNER JOIN states s ON s.id = os.stateId.id WHERE os.organizationId.id = :organizationId")
+    ArrayList<OrganizationState> findStatesByOrganizationId(int organizationId);
 
-    @Query("SELECT s FROM organization_state os INNER JOIN states s ON s.id = os.stateId.id WHERE os.organizationId.id = :organizationId")
-    List<OrganizationState> findStatesByOrganizationIdAsIterable(int organizationId);
+    @Query("SELECT os FROM organization_state os INNER JOIN states s ON s.id = os.stateId.id WHERE os.organizationId.id = :organizationId")
+    Iterable<OrganizationState> findStatesByOrganizationIdAsIterable(int organizationId);
 }
 
 

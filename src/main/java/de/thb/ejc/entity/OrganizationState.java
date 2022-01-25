@@ -22,5 +22,4 @@ public class OrganizationState {
     @ManyToOne(optional = false)
     @JoinColumn(name = "stateid", nullable = false)
     private State stateId;
-
 }

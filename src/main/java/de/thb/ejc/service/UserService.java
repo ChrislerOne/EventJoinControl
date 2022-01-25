@@ -4,18 +4,11 @@ import de.thb.ejc.entity.*;
 import com.google.firebase.auth.FirebaseAuthException;
 import de.thb.ejc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
-import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -86,26 +79,26 @@ public class UserService {
 
     }
 
-    public void addUserToEvent(int userId, int eventId) throws Exception {
+    public boolean addUserToEvent(int userId, int eventId) throws Exception {
         Event event = getEventById(eventId);
         User user = getUserById(userId);
         UserEvent userEvent = new UserEvent();
-        if (!organizationStateRepository.findStatesByOrganizationIdAsIterable(event.getOrganizationId().getId()).isEmpty()) {
-            List<OrganizationState> organizationStateList = organizationStateRepository.findStatesByOrganizationIdAsIterable(event.getOrganizationId().getId());
+        int userStateId = user.getState().getId();
+        int orgStateId;
 
-            for (OrganizationState orgState : organizationStateList) {
-                if (Objects.equals(orgState.getStateId().getId(), user.getState().getId())) {
-                    userEvent.setUserId(user);
-                    userEvent.setEventId(event);
-                    userEventRepository.save(userEvent);
-                    break;
-                } else {
-                    throw new Exception();
-                }
+        Iterable<OrganizationState> organizationStateList = organizationStateRepository.findStatesByOrganizationIdAsIterable(event.getOrganizationId().getId());
+
+        for (OrganizationState orgState : organizationStateList) {
+            orgStateId = orgState.getStateId().getId();
+            if (Objects.equals(orgStateId, userStateId)) {
+                userEvent.setUserId(user);
+                userEvent.setEventId(event);
+                userEventRepository.save(userEvent);
+                return true;
             }
-        } else {
-            throw new Exception();
         }
+
+        return false;
     }
 
 

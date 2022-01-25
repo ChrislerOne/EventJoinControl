@@ -55,7 +55,7 @@ public class OrganizationService {
         return (ArrayList<Organization>) organizationRepository.findAll();
     }
 
-    public ArrayList<State> getStatesByOrganizationId(int organizationId) {
+    public ArrayList<OrganizationState> getStatesByOrganizationId(int organizationId) {
         if (!organizationStateRepository.findStatesByOrganizationId(organizationId).isEmpty()) {
             return organizationStateRepository.findStatesByOrganizationId(organizationId);
         }

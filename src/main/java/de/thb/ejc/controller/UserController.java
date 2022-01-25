@@ -41,8 +41,12 @@ public class UserController {
 
             int userid = userService.getUserByUid(uid).getId();
             int eventid = userEventForm.getEventid();
-            userService.addUserToEvent(userid, eventid);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            boolean isAllowed = userService.addUserToEvent(userid, eventid);
+            if (isAllowed) {
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

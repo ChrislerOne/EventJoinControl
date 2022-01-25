@@ -1,14 +1,11 @@
 package de.thb.ejc.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
-import de.thb.ejc.entity.State;
-import de.thb.ejc.entity.User;
-import de.thb.ejc.entity.UserType;
+import de.thb.ejc.entity.*;
 import de.thb.ejc.form.events.EditEventForm;
 import de.thb.ejc.form.organization.EditOrganizationForm;
 import de.thb.ejc.service.AuthenticationService;
 import de.thb.ejc.service.OrganizationService;
-import de.thb.ejc.entity.Organization;
 import de.thb.ejc.form.organization.OrganizationForm;
 import de.thb.ejc.service.UserService;
 import de.thb.ejc.service.UserTypeService;
@@ -137,7 +134,7 @@ public class OrganizationController {
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            ArrayList<State> states = organizationService.getStatesByOrganizationId(organizationid);
+            ArrayList<OrganizationState> states = organizationService.getStatesByOrganizationId(organizationid);
 
             return ResponseEntity.status(HttpStatus.OK).body(states);
         } catch (Exception e) {

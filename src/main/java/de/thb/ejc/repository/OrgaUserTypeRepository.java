@@ -1,6 +1,5 @@
 package de.thb.ejc.repository;
 
-import de.thb.ejc.entity.Event;
 
 import de.thb.ejc.entity.OrgaUserType;
 import org.springframework.data.jpa.repository.Query;
