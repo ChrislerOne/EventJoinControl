@@ -148,6 +148,7 @@ ehthumbs_vista.db
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
+
 # Windows Installer files
 *.cab
 *.msi
@@ -160,3 +161,6 @@ $RECYCLE.BIN/
 
 # Google Firebase Credentials
 src/main/resources/config/ejc-credentials.json
+src/main/resources/spring.application.json
+
+/target/
