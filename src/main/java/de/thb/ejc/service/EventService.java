@@ -94,7 +94,7 @@ public class EventService {
 
     }
 
-    public int countEventUser(int eventid){
+    public int countEventUser(int eventid) {
         return eventRepository.countAllUserFromEvent(eventid);
     }
 

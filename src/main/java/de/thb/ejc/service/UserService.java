@@ -4,10 +4,17 @@ import de.thb.ejc.entity.*;
 import com.google.firebase.auth.FirebaseAuthException;
 import de.thb.ejc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
+import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,6 +41,9 @@ public class UserService {
 
     @Autowired
     private OrgaUserTypeRepository orgaUserTypeRepository;
+
+    @Autowired
+    private OrganizationStateRepository organizationStateRepository;
 
     public UserEvent getSpecificUserEvent(int userid, int eventid) {
         return userEventRepository.getSpecificUserEvent(userid, eventid);
@@ -68,6 +78,7 @@ public class UserService {
         return userRepository.findAllEventsFromUser(uid);
     }
 
+
     //TODO Überprüfen der Platzierung
     public String getQRCodeDataByUser(String uid) throws FirebaseAuthException {
 
@@ -75,15 +86,28 @@ public class UserService {
 
     }
 
-    public void addUserToEvent(int userId, int eventId) {
+    public void addUserToEvent(int userId, int eventId) throws Exception {
         Event event = getEventById(eventId);
         User user = getUserById(userId);
         UserEvent userEvent = new UserEvent();
+        if (!organizationStateRepository.findStatesByOrganizationIdAsIterable(event.getOrganizationId().getId()).isEmpty()) {
+            List<OrganizationState> organizationStateList = organizationStateRepository.findStatesByOrganizationIdAsIterable(event.getOrganizationId().getId());
 
-        userEvent.setUserId(user);
-        userEvent.setEventId(event);
-        userEventRepository.save(userEvent);
+            for (OrganizationState orgState : organizationStateList) {
+                if (Objects.equals(orgState.getStateId().getId(), user.getState().getId())) {
+                    userEvent.setUserId(user);
+                    userEvent.setEventId(event);
+                    userEventRepository.save(userEvent);
+                    break;
+                } else {
+                    throw new Exception();
+                }
+            }
+        } else {
+            throw new Exception();
+        }
     }
+
 
     public void deleteUserFromEvent(int userid, int eventid) {
         UserEvent userEvent = userEventRepository.getSpecificUserEvent(userid, eventid);
@@ -121,7 +145,7 @@ public class UserService {
 
     public void refreshStatus(String uid) {
         User user = getUserByUid(uid);
-        if ((user.getState().getId() == 6 || user.getState().getId() == 7) && user.getStatetimestamp().isBefore(LocalDateTime.now().minusDays(14)) ) {
+        if ((user.getState().getId() == 6 || user.getState().getId() == 7) && user.getStatetimestamp().isBefore(LocalDateTime.now().minusDays(14))) {
             user.setState(stateService.getStateById(1));
             user.setStatetimestamp(null);
             userRepository.save(user);

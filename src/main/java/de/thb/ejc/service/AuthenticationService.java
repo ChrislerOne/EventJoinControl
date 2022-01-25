@@ -85,7 +85,7 @@ public class AuthenticationService {
         int height = 350;
         byte[] image = new byte[0];
         try {
-            String embeddedurl = "http://23.88.47.71:8090/getStatus/" + text;
+            String embeddedurl = "http://localhost:3000/checkQrCode/" + text; // TODO: Abändern für LIVE
             image = QRCodeService.getQRCodeImage(embeddedurl, width, height);
         } catch (WriterException | IOException e) {
             e.printStackTrace();

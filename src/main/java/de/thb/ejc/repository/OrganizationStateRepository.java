@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.RepositoryDefinition;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RepositoryDefinition(domainClass = OrganizationState.class, idClass = Long.class)
@@ -15,4 +16,9 @@ public interface OrganizationStateRepository extends CrudRepository<Organization
 
     @Query("SELECT s FROM organization_state os INNER JOIN states s ON s.id = os.stateId.id WHERE os.organizationId.id = :organizationId")
     ArrayList<State> findStatesByOrganizationId(int organizationId);
+
+    @Query("SELECT s FROM organization_state os INNER JOIN states s ON s.id = os.stateId.id WHERE os.organizationId.id = :organizationId")
+    List<OrganizationState> findStatesByOrganizationIdAsIterable(int organizationId);
 }
+
+

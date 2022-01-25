@@ -16,11 +16,11 @@ public class OrganizationState {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "organizationId", nullable = false)
+    @JoinColumn(name = "organizationid", nullable = false)
     private Organization organizationId;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "stateId", nullable = false)
+    @JoinColumn(name = "stateid", nullable = false)
     private State stateId;
 
 }

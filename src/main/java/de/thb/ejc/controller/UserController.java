@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 
@@ -135,7 +136,7 @@ public class UserController {
     }
 
     @PostMapping("/user/positiveuser")
-    public  ResponseEntity changeUserStates(@RequestParam String idToken){
+    public ResponseEntity changeUserStates(@RequestParam String idToken) {
         try {
             String uid;
             try {
@@ -180,6 +181,22 @@ public class UserController {
             }
             userService.refreshStatus(uid);
             return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+
+    @GetMapping("/user/getByIdToken")
+    public ResponseEntity getUserByIdToken(@RequestParam String idToken) {
+        try {
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            User user = userService.getUserByUid(uid);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

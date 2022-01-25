@@ -1,10 +1,9 @@
 package de.thb.ejc.service;
 
-import de.thb.ejc.entity.Event;
-import de.thb.ejc.entity.Organization;
-import de.thb.ejc.entity.State;
+import de.thb.ejc.entity.*;
 import de.thb.ejc.form.organization.EditOrganizationForm;
 import de.thb.ejc.form.organization.OrganizationForm;
+import de.thb.ejc.repository.OrgaUserTypeRepository;
 import de.thb.ejc.repository.OrganizationRepository;
 import de.thb.ejc.repository.OrganizationStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +19,24 @@ public class OrganizationService {
     @Autowired
     private OrganizationStateRepository organizationStateRepository;
 
+    @Autowired
+    private OrgaUserTypeRepository orgaUserTypeRepository;
+
     public Organization getOrganizationById(int id) {
         return organizationRepository.findById(id).get();
     }
 
-    public void addOrganization(OrganizationForm organizationForm) {
+    public void addOrganization(OrganizationForm organizationForm, User user, UserType userType) {
         Organization organization = new Organization();
         organization.setName(organizationForm.getName());
+        organization.setDescription(organizationForm.getDescription());
         organizationRepository.save(organization);
+
+        OrgaUserType orgaUserType = new OrgaUserType();
+        orgaUserType.setUser(user);
+        orgaUserType.setOrganization(organization);
+        orgaUserType.setUserType(userType);
+        orgaUserTypeRepository.save(orgaUserType);
     }
 
     public void editOrganization(EditOrganizationForm editOrganizationForm) {
@@ -47,7 +56,7 @@ public class OrganizationService {
     }
 
     public ArrayList<State> getStatesByOrganizationId(int organizationId) {
-        if(!organizationStateRepository.findStatesByOrganizationId(organizationId).isEmpty()) {
+        if (!organizationStateRepository.findStatesByOrganizationId(organizationId).isEmpty()) {
             return organizationStateRepository.findStatesByOrganizationId(organizationId);
         }
         return null;
