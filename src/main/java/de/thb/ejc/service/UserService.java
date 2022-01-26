@@ -189,7 +189,7 @@ public class UserService {
         int height = 350;
         byte[] image = new byte[0];
         try {
-            String embeddedurl = "http://localhost:3000/checkQrCode/" + text; // TODO: Abändern für LIVE
+            String embeddedurl = "https://www.ev-jo-co.xn--fd-fkaa.de/checkQrCode/" + text;
             image = QRCodeService.getQRCodeImage(embeddedurl, width, height);
         } catch (WriterException | IOException e) {
             e.printStackTrace();
