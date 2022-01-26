@@ -2,7 +2,7 @@ package de.thb.ejc.service;
 
 import de.thb.ejc.entity.State;
 import de.thb.ejc.entity.User;
-import de.thb.ejc.form.StateForm;
+import de.thb.ejc.form.state.StateForm;
 import de.thb.ejc.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +16,6 @@ public class StateService {
 
     public State getStateById(int id) {
         return stateRepository.findById(id).get();
-    }
-
-    //TODO @Eric
-    public ArrayList<User> getUserWithStatus(String state) {
-        return stateRepository.findUserByState(state);
     }
 
     public ArrayList<State> getAllStates() {

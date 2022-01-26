@@ -1,4 +1,4 @@
-package de.thb.ejc.form;
+package de.thb.ejc.form.state;
 
 public class StateForm {
     private String name;

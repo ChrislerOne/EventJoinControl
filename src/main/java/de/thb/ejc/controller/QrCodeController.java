@@ -25,14 +25,24 @@ public class QrCodeController {
     @Autowired
     UserService userService;
 
+    /**
+     * Endpoint for retrieving the data of the own QRCode at any given point.
+     * The Base64 data needs to be decoded in Frontend.
+     *
+     * @param idToken temporary token of user session from frontend
+     * @return HTTP Response body with JSON containing the base64 encoded data of the QRCode
+     */
     @GetMapping(value = "/qrcode/get")
     public ResponseEntity viewQRCode(@RequestParam String idToken) {
         try {
-            String uid = authenticationService.verifyToken(idToken);
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
             String qrCodeData = userService.getQRCodeDataByUser(uid);
             return ResponseEntity.status(HttpStatus.OK).body(qrCodeData);
-        } catch (FirebaseAuthException fe) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

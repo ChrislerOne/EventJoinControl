@@ -23,6 +23,12 @@ public class UserTypeController {
     @Autowired
     UserTypeService userTypeService;
 
+
+    /**
+     * Endpoint for retrieving every User type (staff, admin, user)
+     * @param idToken temporary token of user session from frontend
+     * @return HTTP Response containing JSON with every UserType in body
+     */
     @GetMapping("/usertypes/list")
     public ResponseEntity getAllUserTypes(@RequestParam String idToken) {
         try {

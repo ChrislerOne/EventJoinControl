@@ -21,20 +21,7 @@ public class UserTypeService {
         }
     }
 
-    public UserType getUserTypeByName(String name) {
-        return userTypeRepository.findByName(name);
-    }
-
     public ArrayList<UserType> getAllUserTypes() {
         return (ArrayList<UserType>) userTypeRepository.findAll();
     }
-
-//    public UserType getUserTypeByUid(String uid) {
-//        if (userTypeRepository.findByUid(uid).isPresent()) {
-//            return userTypeRepository.findByUid(uid).get();
-//        } else {
-//            return null;
-//        }
-//
-//    }
 }

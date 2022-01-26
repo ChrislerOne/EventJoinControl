@@ -2,7 +2,7 @@ package de.thb.ejc.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import de.thb.ejc.entity.State;
-import de.thb.ejc.form.StateForm;
+import de.thb.ejc.form.state.StateForm;
 import de.thb.ejc.service.AuthenticationService;
 import de.thb.ejc.service.StateService;
 import de.thb.ejc.service.UserService;
@@ -25,6 +25,14 @@ public class StateController {
     @Autowired
     private UserService userService;
 
+
+    /**
+     * Endpoint for checking state of User through the QRCode.
+     * It is not necessary that a user must be logged in.
+     *
+     * @param qrToken SHA-256 Hash String of USer Email, URL with specific token is stored in the QRCode
+     * @return serialized JSON containing the state of the user
+     */
     @GetMapping(value = "/getStatus/{token}")
     public State getStatus(
             @PathVariable("token") String qrToken) {
@@ -33,12 +41,18 @@ public class StateController {
         return state;
     }
 
-
+    /**
+     * Endpoint for adding a State.
+     *
+     * @param stateForm for deserializing incoming data from JSON
+     * @param idToken   temporary token of user session from frontend
+     * @return HTTP CREATED
+     */
     @PostMapping("/states/add")
-    public ResponseEntity addState(@RequestBody StateForm stateForm, @RequestBody String token) {
+    public ResponseEntity addState(@RequestBody StateForm stateForm, @RequestBody String idToken) {
         try {
             try {
-                String uid = authenticationService.verifyToken(token);
+                String uid = authenticationService.verifyToken(idToken);
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
@@ -49,11 +63,17 @@ public class StateController {
         }
     }
 
+    /**
+     * Endpoint for retrieving every State.
+     *
+     * @param idToken temporary token of user session from frontend
+     * @return HTTP with body containing an JSON with every State
+     */
     @GetMapping("/states/list")
-    public ResponseEntity listStates(@RequestBody String token) {
+    public ResponseEntity listStates(@RequestBody String idToken) {
         try {
             try {
-                String uid = authenticationService.verifyToken(token);
+                String uid = authenticationService.verifyToken(idToken);
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
@@ -63,7 +83,6 @@ public class StateController {
             return ResponseEntity.internalServerError().body(e);
         }
     }
-
 
 
 }

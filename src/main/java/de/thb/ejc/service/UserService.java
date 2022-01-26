@@ -1,24 +1,37 @@
 package de.thb.ejc.service;
 
+import com.google.zxing.WriterException;
 import de.thb.ejc.entity.*;
 import com.google.firebase.auth.FirebaseAuthException;
+import de.thb.ejc.form.user.RegisterUserForm;
 import de.thb.ejc.repository.*;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Objects;
 
 @Service
 public class UserService {
 
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @Autowired
-    EventService eventService;
+    private EventService eventService;
 
     @Autowired
-    StateService stateService;
+    private StateService stateService;
+
+    @Autowired
+    private UserTypeService userTypeService;
+
+    @Autowired
+    private OrganizationRepository organizationRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -71,8 +84,6 @@ public class UserService {
         return userRepository.findAllEventsFromUser(uid);
     }
 
-
-    //TODO Überprüfen der Platzierung
     public String getQRCodeDataByUser(String uid) throws FirebaseAuthException {
 
         return qrCodeRepository.findByUid(uid).get();
@@ -125,7 +136,7 @@ public class UserService {
     public void reportPositiveUser(String uid) {
 
         ArrayList<Event> events = getAllEventsFromUser(uid);
-        eventService.changeStateToPositiv(events);
+        eventService.changeStateToPositive(events);
         User user = getUserByUid(uid);
         user.setState(stateService.getStateById(6));
         user.setStatetimestamp(LocalDateTime.now());
@@ -143,6 +154,49 @@ public class UserService {
             user.setStatetimestamp(null);
             userRepository.save(user);
         }
+    }
+
+    public void saveUser(RegisterUserForm registerUserForm) throws FirebaseAuthException {
+        String uid = authenticationService.verifyToken(registerUserForm.getIdToken());
+        String email = registerUserForm.getEmail();
+        String qrToken = DigestUtils.sha256Hex(email);
+
+        User user = new User();
+        user.setState(stateService.getStateById(1));
+        user.setUid(uid);
+        user.setEmail(email);
+        user.setQrToken(qrToken);
+        userRepository.save(user);
+
+        QRCode qrCode = new QRCode();
+        qrCode.setUser(user);
+        qrCode.setFile(setQRCode(qrToken));
+        qrCodeRepository.save(qrCode);
+
+        //SET USER TYPE FOR EVERY ORGANIZATION
+        Iterable<Organization> allOrgs = organizationRepository.findAll();
+        for (Organization org : allOrgs) {
+            OrgaUserType orgaUserType = new OrgaUserType();
+            orgaUserType.setUser(user);
+            orgaUserType.setUserType(userTypeService.getUserTypeById(10));
+            orgaUserType.setOrganization(org);
+            orgaUserTypeRepository.save(orgaUserType);
+        }
+    }
+
+    public String setQRCode(String text) {
+        int width = 350;
+        int height = 350;
+        byte[] image = new byte[0];
+        try {
+            String embeddedurl = "http://localhost:3000/checkQrCode/" + text; // TODO: Abändern für LIVE
+            image = QRCodeService.getQRCodeImage(embeddedurl, width, height);
+        } catch (WriterException | IOException e) {
+            e.printStackTrace();
+        }
+        String qrcode = Base64.getEncoder().encodeToString(image);
+
+        return qrcode;
     }
 
 }

@@ -1,4 +1,4 @@
-package de.thb.ejc.form.events;
+package de.thb.ejc.form.event;
 
 import lombok.Getter;
 

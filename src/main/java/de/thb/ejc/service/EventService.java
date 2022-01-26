@@ -2,8 +2,8 @@ package de.thb.ejc.service;
 
 import de.thb.ejc.entity.Event;
 import de.thb.ejc.entity.User;
-import de.thb.ejc.form.events.EditEventForm;
-import de.thb.ejc.form.events.EventForm;
+import de.thb.ejc.form.event.EditEventForm;
+import de.thb.ejc.form.event.EventForm;
 import de.thb.ejc.repository.EventRepository;
 import de.thb.ejc.repository.OrganizationRepository;
 import de.thb.ejc.repository.StateRepository;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventService {
@@ -72,30 +71,30 @@ public class EventService {
         return eventRepository.findEventsByOrganization(organizationId);
     }
 
-    public void changeStateToPositiv(ArrayList<Event> events) {
-        events.forEach(event -> changeEvent(event.getId()));
+    public void changeStateToPositive(ArrayList<Event> events) {
+        events.forEach(event -> changeEventToRestricted(event.getId()));
     }
 
-    public void changeEvent(int eventId) {
+    public void changeEventToRestricted(int eventId) {
         Event event = getEventById(eventId);
         ArrayList<User> userToChange = eventRepository.findAllUserFromEvent(eventId);
         if (stateRepository.findById(7).isPresent()) {
-            userToChange.forEach(this::changeUser);
+            userToChange.forEach(this::changeUserToMaybeInfected);
         }
         event.setStateId(stateRepository.findById(3).get());
         eventRepository.save(event);
 
     }
 
-    public void changeUser(User user) {
+    public void changeUserToMaybeInfected(User user) {
         user.setState(stateRepository.findById(7).get());
         user.setStatetimestamp(LocalDateTime.now());
         userRepository.save(user);
 
     }
 
-    public int countEventUser(int eventid) {
-        return eventRepository.countAllUserFromEvent(eventid);
+    public int countEventUser(int eventId) {
+        return eventRepository.countAllUserFromEvent(eventId);
     }
 
 
