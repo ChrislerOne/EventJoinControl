@@ -6,7 +6,7 @@
 
 EJC wurde auf einer Debian 10 Cloud-Instanz von Hetzner deployed. Das Projekt wurde dabei über Maven als JAR verpackt
 und anschließend über einen Service angebunden. Als Proxy fungiert ein NGINX, welcher auf die Requests auf die
-Adresse https://ejc-api.fööd.de reagiert.
+entsprechende Adresse reagiert.
 
 ### Frontend
 
