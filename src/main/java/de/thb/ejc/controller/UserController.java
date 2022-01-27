@@ -279,12 +279,14 @@ public class UserController {
 
     /**
      * Endpoint for changing the status of a certain user
-     * @param idToken temporary token of user session from frontend
-     * @param qrToken token to identify the user who should be changed
+     *
+     * @param idToken   temporary token of user session from frontend
+     * @param qrtoken   token to identify the user who should be changed
+     * @param statename name of the state
      * @return HTTP OK
      */
     @PostMapping("/user/editstatus")
-    public ResponseEntity editStatus(@RequestParam String idToken, @RequestParam String qrToken, @RequestBody String stateName) {
+    public ResponseEntity editStatus(@RequestParam String idToken, @RequestParam String qrtoken, @RequestParam String statename) {
         try {
             String uid;
             try {
@@ -292,7 +294,7 @@ public class UserController {
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            userService.changeStateOfUser(qrToken, stateName);
+            userService.changeStateOfUser(qrtoken, statename);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);

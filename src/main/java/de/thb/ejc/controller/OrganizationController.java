@@ -169,9 +169,9 @@ public class OrganizationController {
     /**
      * Endpoint for adding the selected state as an allowed state for selected organization
      *
-     * @param idToken temporary token of user session from frontend
+     * @param idToken        temporary token of user session from frontend
      * @param organizationid id of selected organization
-     * @param stateId id of selected state
+     * @param stateId        id of selected state
      * @return HTTP OK
      */
     @PostMapping("/organization/addState")
@@ -182,7 +182,7 @@ public class OrganizationController {
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-               organizationService.addStateToOrganization(organizationid, stateId);
+            organizationService.addStateToOrganization(organizationid, stateId);
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
@@ -193,25 +193,26 @@ public class OrganizationController {
     /**
      * Endpoint for deleting the selected state as an allowed state for selected organization
      *
-     * @param idToken temporary token of user session from frontend
-     * @param organizationStateId id of selected OrganizationState entry
+     * @param idToken             temporary token of user session from frontend
+     * @param organizationStateid id of selected OrganizationState entry
      * @return HTTP OK
      */
-    @PostMapping("/organization/deleteState")
-    public ResponseEntity deleteStateFromOrganization(@RequestParam String idToken, @RequestParam int organizationStateId) {
+    @DeleteMapping("/organization/deleteState")
+    public ResponseEntity deleteStateFromOrganization(@RequestParam String idToken, @RequestParam int organizationStateid) {
         try {
             try {
                 String uid = authenticationService.verifyToken(idToken);
             } catch (FirebaseAuthException fe) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-            organizationService.deleteStateFromOrganization(organizationStateId);
+            organizationService.deleteStateFromOrganization(organizationStateid);
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
     }
+
     /**
      * Endpoint for retrieving every user allowed to operate in selected Organization.
      *
