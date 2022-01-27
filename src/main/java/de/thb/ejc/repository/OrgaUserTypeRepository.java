@@ -12,9 +12,12 @@ import java.util.Optional;
 
 @RepositoryDefinition(domainClass = OrgaUserType.class, idClass = Long.class)
 public interface OrgaUserTypeRepository extends CrudRepository<OrgaUserType, Long> {
-    Optional<OrgaUserType> findById(int id);
+    OrgaUserType findById(int id);
 
     @Query("select out FROM usertype_orga_user out WHERE out.user.id = :userid")
     ArrayList<OrgaUserType> findOrgsByUser(@Param("userid") int userId);
+
+    @Query("select out FROM usertype_orga_user out WHERE out.organization.id = :organizationId")
+    ArrayList<OrgaUserType> findUsersByOrg(@Param("organizationId") int organizationId);
 
 }

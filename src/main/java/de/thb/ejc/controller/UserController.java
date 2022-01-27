@@ -133,6 +133,29 @@ public class UserController {
 
     }
 
+    /**
+     * Endpoint for deleting the selected user in the Organization-UserType-User-Table to revoke permission.
+     *
+     * @param idToken        temporary token of user session from frontend
+     * @param orgausertypeid id of selected OrgaUserType
+     * @return HTTP OK
+     */
+    @DeleteMapping("/user/revokeOrganizationPermission")
+    public ResponseEntity revokePermission(@RequestParam String idToken, @RequestParam int orgausertypeid) {
+        try {
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            userService.revokePermissionToOrganization(orgausertypeid);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+
+    }
 
     /**
      * Endpoint for getting every Event where logged-in User is registered.

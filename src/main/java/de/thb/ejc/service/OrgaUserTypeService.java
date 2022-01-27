@@ -14,18 +14,17 @@ import java.util.ArrayList;
 
 @Service
 public class OrgaUserTypeService {
-    @Autowired
-    private OrganizationRepository organizationRepository;
 
     @Autowired
     private OrgaUserTypeRepository orgaUserTypeRepository;
 
-    public OrgaUserType getOrgaUserTypeById(int id) {
-        return orgaUserTypeRepository.findById(id).get();
-    }
 
     public ArrayList<OrgaUserType> getAllOrgsByUser(int id) {
         return orgaUserTypeRepository.findOrgsByUser(id);
+    }
+
+    public ArrayList<OrgaUserType> getUsersByOrg(int id) {
+        return orgaUserTypeRepository.findUsersByOrg(id);
     }
 
 

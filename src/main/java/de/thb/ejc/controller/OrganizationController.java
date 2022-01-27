@@ -3,11 +3,8 @@ package de.thb.ejc.controller;
 import com.google.firebase.auth.FirebaseAuthException;
 import de.thb.ejc.entity.*;
 import de.thb.ejc.form.organization.EditOrganizationForm;
-import de.thb.ejc.service.AuthenticationService;
-import de.thb.ejc.service.OrganizationService;
+import de.thb.ejc.service.*;
 import de.thb.ejc.form.organization.OrganizationForm;
-import de.thb.ejc.service.UserService;
-import de.thb.ejc.service.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +27,8 @@ public class OrganizationController {
     @Autowired
     private UserTypeService userTypeService;
 
+    @Autowired
+    private OrgaUserTypeService orgaUserTypeService;
 
     /**
      * Endpoint for adding an Organization.
@@ -64,7 +63,7 @@ public class OrganizationController {
      * @return HTTP CREATED
      */
     @PostMapping("/organizations/edit")
-    public ResponseEntity editEvent(@RequestParam String idToken, @RequestBody EditOrganizationForm editOrganizationForm) {
+    public ResponseEntity editOrganization(@RequestParam String idToken, @RequestBody EditOrganizationForm editOrganizationForm) {
         try {
             try {
                 String uid = authenticationService.verifyToken(idToken);
@@ -85,8 +84,8 @@ public class OrganizationController {
      * @param idToken        temporary token of user session from frontend
      * @return HTTP CREATED
      */
-    @PostMapping("/organizations/delete")
-    public ResponseEntity deleteEvent(@RequestParam String idToken, @RequestBody int organizationid) {
+    @DeleteMapping("/organizations/delete")
+    public ResponseEntity deleteOrganization(@RequestParam String idToken, @RequestParam int organizationid) {
         try {
             try {
                 String uid = authenticationService.verifyToken(idToken);
@@ -166,4 +165,28 @@ public class OrganizationController {
             return ResponseEntity.internalServerError().body(e);
         }
     }
+
+    /**
+     * Endpoint for retrieving every user allowed to operate in selected Organization.
+     *
+     * @param idToken        temporary token of user session from frontend
+     * @param organizationid id of selected Organization
+     * @return JSON containing every possible state for given organization to be allowed for events
+     */
+    @GetMapping("/organization/user/list")
+    public ResponseEntity listAllUserWithPermissionFromOrganization(@RequestParam String idToken, @RequestParam int organizationid) {
+        try {
+            try {
+                String uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            ArrayList<OrgaUserType> orgaUserTypesList = orgaUserTypeService.getUsersByOrg(organizationid);
+
+            return ResponseEntity.status(HttpStatus.OK).body(orgaUserTypesList);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+
 }

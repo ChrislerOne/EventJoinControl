@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -116,6 +117,11 @@ public class UserService {
     public void deleteUserFromEvent(int userid, int eventid) {
         UserEvent userEvent = userEventRepository.getSpecificUserEvent(userid, eventid);
         userEventRepository.delete(userEvent);
+    }
+
+    public void revokePermissionToOrganization(int orgausertypeid) {
+        OrgaUserType orgaUserType = orgaUserTypeRepository.findById(orgausertypeid);
+        orgaUserTypeRepository.delete(orgaUserType);
     }
 
     public void deleteUser(int userid) {
