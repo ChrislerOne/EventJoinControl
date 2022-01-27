@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RepositoryDefinition(domainClass = State.class, idClass = Long.class)
 public interface StateRepository extends CrudRepository<State, Long> {
-    Optional<State> findById(int id);
+    State findById(int id);
 
     //Returns ArrayList of Users with given status
     @Query("SELECT n from states st INNER JOIN user n ON st.id = n.state.id where st.name= :state")

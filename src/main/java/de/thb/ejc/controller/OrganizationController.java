@@ -150,7 +150,7 @@ public class OrganizationController {
      * @param organizationid id of selected Organization
      * @return JSON containing every possible state for given organization to be allowed for events
      */
-    @GetMapping("/organization/listorganizationstates")
+    @PostMapping("/organization/listorganizationstates")
     public ResponseEntity listOrganizationStates(@RequestParam String idToken, @RequestBody int organizationid) {
         try {
             try {
@@ -161,6 +161,30 @@ public class OrganizationController {
             ArrayList<OrganizationState> states = organizationService.getStatesByOrganizationId(organizationid);
 
             return ResponseEntity.status(HttpStatus.OK).body(states);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+
+    /**
+     * Endpoint for adding the selected state as an allowed state for selected organization
+     *
+     * @param idToken temporary token of user session from frontend
+     * @param organizationid id of selected organization
+     * @param stateId id of selected state
+     * @return HTTP OK
+     */
+    @PostMapping("/organization/addState")
+    public ResponseEntity addStateToOrganization(@RequestParam String idToken, @RequestParam int organizationid, @RequestParam int stateId) {
+        try {
+            try {
+                String uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+               organizationService.addStateToOrganization(organizationid, stateId);
+
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

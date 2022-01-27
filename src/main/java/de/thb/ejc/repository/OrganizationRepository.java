@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RepositoryDefinition(domainClass = Organization.class, idClass = Long.class)
 public interface OrganizationRepository extends CrudRepository<Organization, Long> {
-    Optional<Organization> findById(int id);
+    Organization findById(int id);
 
     @Query("select o from organizations o WHERE o.name = :name")
     Optional<Organization> findEventByName(@Param("name") String name);

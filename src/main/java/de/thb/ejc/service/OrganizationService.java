@@ -6,6 +6,7 @@ import de.thb.ejc.form.organization.OrganizationForm;
 import de.thb.ejc.repository.OrgaUserTypeRepository;
 import de.thb.ejc.repository.OrganizationRepository;
 import de.thb.ejc.repository.OrganizationStateRepository;
+import de.thb.ejc.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,11 @@ public class OrganizationService {
     @Autowired
     private OrgaUserTypeRepository orgaUserTypeRepository;
 
+    @Autowired
+    private StateRepository stateRepository;
+
     public Organization getOrganizationById(int id) {
-        return organizationRepository.findById(id).get();
+        return organizationRepository.findById(id);
     }
 
     public void addOrganization(OrganizationForm organizationForm, User user, UserType userType) {
@@ -47,7 +51,7 @@ public class OrganizationService {
     }
 
     public void deleteOrganization(int organizationid) {
-        Organization currentOrganization = organizationRepository.findById(organizationid).get();
+        Organization currentOrganization = organizationRepository.findById(organizationid);
         organizationRepository.delete(currentOrganization);
     }
 
@@ -60,5 +64,12 @@ public class OrganizationService {
             return organizationStateRepository.findStatesByOrganizationId(organizationId);
         }
         return null;
+    }
+
+    public void addStateToOrganization(int organizationId, int stateId) {
+        OrganizationState organizationState = new OrganizationState();
+        organizationState.setOrganizationId(organizationRepository.findById(organizationId));
+        organizationState.setStateId(stateRepository.findById(stateId));
+        organizationStateRepository.save(organizationState);
     }
 }
