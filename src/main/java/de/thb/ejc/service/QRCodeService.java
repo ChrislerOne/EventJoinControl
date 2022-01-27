@@ -16,6 +16,14 @@ import java.nio.file.Path;
 @Service
 public class QRCodeService {
 
+    /**
+     * Service function to generate QRCode.
+     *
+     * @param text that should be embedded (containing base_url/getStatus/{qrToken})
+     * @param width of QRCode
+     * @param height of QRCode
+     * @return Base64 byte data that needs to be decoded in frontend
+     */
     public static byte[] getQRCodeImage(String text, int width, int height) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);

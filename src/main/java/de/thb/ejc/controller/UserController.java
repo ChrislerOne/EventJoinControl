@@ -277,6 +277,28 @@ public class UserController {
         }
     }
 
+    /**
+     * Endpoint for changing the status of a certain user
+     * @param idToken temporary token of user session from frontend
+     * @param qrToken token to identify the user who should be changed
+     * @return HTTP OK
+     */
+    @PostMapping("/user/editstatus")
+    public ResponseEntity editStatus(@RequestParam String idToken, @RequestParam String qrToken, @RequestBody String stateName) {
+        try {
+            String uid;
+            try {
+                uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            userService.changeStateOfUser(qrToken, stateName);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+
 
     /**
      * Endpoint for retrieving Data of logged-in user.

@@ -17,4 +17,7 @@ public interface StateRepository extends CrudRepository<State, Long> {
     //Returns ArrayList of Users with given status
     @Query("SELECT n from states st INNER JOIN user n ON st.id = n.state.id where st.name= :state")
     ArrayList<User> findUserByState(@Param("state")String state);
+
+    @Query("SELECT st FROM states st WHERE st.name = :stateName")
+    State findByName(@Param("stateName") String stateName);
 }

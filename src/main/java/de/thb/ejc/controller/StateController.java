@@ -70,7 +70,7 @@ public class StateController {
      * @return HTTP with body containing an JSON with every State
      */
     @GetMapping("/states/list")
-    public ResponseEntity listStates(@RequestBody String idToken) {
+    public ResponseEntity listStates(@RequestParam String idToken) {
         try {
             try {
                 String uid = authenticationService.verifyToken(idToken);

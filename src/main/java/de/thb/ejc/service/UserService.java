@@ -32,6 +32,9 @@ public class UserService {
     private UserTypeService userTypeService;
 
     @Autowired
+    private StateRepository stateRepository;
+
+    @Autowired
     private OrganizationRepository organizationRepository;
 
     @Autowired
@@ -160,6 +163,12 @@ public class UserService {
             user.setStatetimestamp(null);
             userRepository.save(user);
         }
+    }
+
+    public void changeStateOfUser(String qrToken, String stateName) {
+        User user = userRepository.findUserByQRToken(qrToken);
+        user.setState(stateRepository.findByName(stateName));
+        userRepository.save(user);
     }
 
     public void saveUser(RegisterUserForm registerUserForm) throws FirebaseAuthException {
