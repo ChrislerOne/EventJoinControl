@@ -27,7 +27,7 @@ public class OrganizationService {
     private StateRepository stateRepository;
 
     public Organization getOrganizationById(int id) {
-        return organizationRepository.findById(id);
+        return organizationRepository.findById(id).get();
     }
 
     public void addOrganization(OrganizationForm organizationForm, User user, UserType userType) {
@@ -51,7 +51,7 @@ public class OrganizationService {
     }
 
     public void deleteOrganization(int organizationid) {
-        Organization currentOrganization = organizationRepository.findById(organizationid);
+        Organization currentOrganization = organizationRepository.findById(organizationid).get();
         organizationRepository.delete(currentOrganization);
     }
 
@@ -68,8 +68,8 @@ public class OrganizationService {
 
     public void addStateToOrganization(int organizationId, int stateId) {
         OrganizationState organizationState = new OrganizationState();
-        organizationState.setOrganizationId(organizationRepository.findById(organizationId));
-        organizationState.setStateId(stateRepository.findById(stateId));
+        organizationState.setOrganizationId(organizationRepository.findById(organizationId).get());
+        organizationState.setStateId(stateRepository.findById(stateId).get());
         organizationStateRepository.save(organizationState);
     }
 }

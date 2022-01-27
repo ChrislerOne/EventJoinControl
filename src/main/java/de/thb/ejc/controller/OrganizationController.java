@@ -150,8 +150,8 @@ public class OrganizationController {
      * @param organizationid id of selected Organization
      * @return JSON containing every possible state for given organization to be allowed for events
      */
-    @PostMapping("/organization/listorganizationstates")
-    public ResponseEntity listOrganizationStates(@RequestParam String idToken, @RequestBody int organizationid) {
+    @GetMapping("/organization/listorganizationstates")
+    public ResponseEntity listOrganizationStates(@RequestParam String idToken, @RequestParam int organizationid) {
         try {
             try {
                 String uid = authenticationService.verifyToken(idToken);

@@ -167,7 +167,7 @@ public class UserService {
 
     public void changeStateOfUser(String qrToken, String stateName) {
         User user = userRepository.findUserByQRToken(qrToken);
-        user.setState(stateRepository.findByName(stateName));
+        user.setState(stateRepository.findByName(stateName).get());
         userRepository.save(user);
     }
 
