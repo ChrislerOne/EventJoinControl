@@ -191,6 +191,28 @@ public class OrganizationController {
     }
 
     /**
+     * Endpoint for deleting the selected state as an allowed state for selected organization
+     *
+     * @param idToken temporary token of user session from frontend
+     * @param organizationStateId id of selected OrganizationState entry
+     * @return HTTP OK
+     */
+    @PostMapping("/organization/deleteState")
+    public ResponseEntity deleteStateFromOrganization(@RequestParam String idToken, @RequestParam int organizationStateId) {
+        try {
+            try {
+                String uid = authenticationService.verifyToken(idToken);
+            } catch (FirebaseAuthException fe) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+            organizationService.deleteStateFromOrganization(organizationStateId);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+    /**
      * Endpoint for retrieving every user allowed to operate in selected Organization.
      *
      * @param idToken        temporary token of user session from frontend

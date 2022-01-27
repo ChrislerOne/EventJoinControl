@@ -72,4 +72,8 @@ public class OrganizationService {
         organizationState.setStateId(stateRepository.findById(stateId).get());
         organizationStateRepository.save(organizationState);
     }
+
+    public void deleteStateFromOrganization(int organizationStateId) {
+        organizationStateRepository.delete(organizationStateRepository.findById(organizationStateId).get());
+    }
 }
