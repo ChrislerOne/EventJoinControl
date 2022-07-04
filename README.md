@@ -1,5 +1,10 @@
 # Event Join Control - Backend
 
+## Hinweis
+
+Das Projekt wurde im Rahmen einer Aufgabe für die Technische Hochschule Brandenburg entwickelt. Etwaige Konfigurationen, Links oder ähnliches sind somit nicht mehr erreichbar. Das Projekt kann dennoch deployed und genutzt werden, solange die entsprechenden Verbindungsparameter geändert werden. Happy Coding!
+
+
 ## Deployment
 
 ### Backend
